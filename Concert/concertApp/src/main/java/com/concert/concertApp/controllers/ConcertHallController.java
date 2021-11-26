@@ -46,12 +46,12 @@ public class ConcertHallController {
         try {
 
             hall = concertHallRepo.findConcertHallByConHallId(id)
-                    .orElse(new ConcertHall(name, adress, city, capacity));
+                    .orElse(new ConcertHall(name, adress,  capacity));
 
             if (hall != null) {
                 hall.setConHallName(name);
                 hall.setConHallAdress(adress);
-                hall.setConHallCity(city);
+               // hall.setConHallCity(city);
                 hall.setConHallCapacity(capacity);
             }
 
