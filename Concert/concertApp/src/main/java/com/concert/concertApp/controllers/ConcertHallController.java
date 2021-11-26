@@ -1,6 +1,7 @@
 package com.concert.concertApp.controllers;
 
 import com.concert.concertApp.entities.ConcertHall;
+import com.concert.concertApp.repositories.CityRepository;
 import com.concert.concertApp.repositories.ConcertHallRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,8 @@ import java.util.Optional;
 public class ConcertHallController {
 
     private final ConcertHallRepository concertHallRepo;
+    private final CityRepository cityRepo ;
+    
     ConcertHallController(ConcertHallRepository concertHallRepo) {
         this.concertHallRepo = concertHallRepo;
     }
