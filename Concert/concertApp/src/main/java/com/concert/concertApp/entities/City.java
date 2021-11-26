@@ -2,6 +2,7 @@ package com.concert.concertApp.entities;
 
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "city")
@@ -13,6 +14,9 @@ public class City {
     @Column(name = "city_name")
     private  String name ;
 
+@OneToMany(mappedBy = "city")
+private Set<ConcertHall> halls ;
+
 
 
     public City() {
@@ -22,6 +26,13 @@ public class City {
         this.name = name;
     }
 
+    public Set<ConcertHall> getHalls() {
+        return halls;
+    }
+
+    public void setHalls(Set<ConcertHall> halls) {
+        this.halls = halls;
+    }
     public Long getId() {
         return id;
     }
