@@ -1,5 +1,6 @@
 package com.concert.concertApp.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.procedure.ParameterMisuseException;
 import org.springframework.http.ResponseEntity;
 import javax.persistence.*;
@@ -26,6 +27,7 @@ public class ConcertHall {
 
     @Column(name = "con_hall_capacity")
     private  Long conHallCapacity ;
+
 
     @ManyToOne
     @JoinColumn(name = "city_id" )

@@ -1,19 +1,24 @@
 package com.concert.concertApp.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
 @Table(name = "city")
 public class City {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     private  Long id ;
 
     @Column(name = "city_name")
     private  String name ;
 
+    @JsonIgnore
 @OneToMany(mappedBy = "city")
 private Set<ConcertHall> halls ;
 

@@ -1,5 +1,6 @@
 package com.concert.concertApp.controllers;
 
+import com.concert.concertApp.entities.City;
 import com.concert.concertApp.entities.ConcertHall;
 import com.concert.concertApp.repositories.CityRepository;
 import com.concert.concertApp.repositories.ConcertHallRepository;
@@ -20,8 +21,9 @@ public class ConcertHallController {
     private final ConcertHallRepository concertHallRepo;
     private final CityRepository cityRepo ;
     
-    ConcertHallController(ConcertHallRepository concertHallRepo) {
+    ConcertHallController(ConcertHallRepository concertHallRepo, CityRepository cityRepo) {
         this.concertHallRepo = concertHallRepo;
+        this.cityRepo = cityRepo;
     }
 
     @GetMapping("/fetch")
@@ -79,5 +81,11 @@ concertHallRepo.delete(hall.get()) ;
         //return("Hall with name : " + name + "in " + city + " was deleted!");
 
 
+    }
+
+
+    @GetMapping("/city/save")
+    public List<City> getAllCitites() {
+        return cityRepo.findAll();
     }
 }
