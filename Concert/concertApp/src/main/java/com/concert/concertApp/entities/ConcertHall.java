@@ -27,6 +27,10 @@ public class ConcertHall {
     @Column(name = "con_hall_capacity")
     private  Long conHallCapacity ;
 
+    @ManyToOne
+    @JoinColumn(name = "city_id" )
+    private City city ;
+
     public  ConcertHall(){
 
     }
@@ -38,6 +42,14 @@ public class ConcertHall {
         this.conHallAdress = conHallAdress;
         this.conHallCity = conHallCity;
         this.conHallCapacity = conHallCapacity;
+    }
+
+    public City getCity() {
+        return city;
+    }
+
+    public void setCity(City city) {
+        this.city = city;
     }
 
     public Long getConHallId() {
