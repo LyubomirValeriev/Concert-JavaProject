@@ -20,11 +20,6 @@ public class City {
     @Column(name = "city_name")
     private  String name ;
 
-    @JsonIgnore
-@OneToMany(mappedBy = "city")
-private Set<ConcertHall> halls ;
-
-
 
     public City() {
     }
@@ -33,13 +28,6 @@ private Set<ConcertHall> halls ;
         this.name = name;
     }
 
-    public Set<ConcertHall> getHalls() {
-        return halls;
-    }
-
-    public void setHalls(Set<ConcertHall> halls) {
-        this.halls = halls;
-    }
     public Long getId() {
         return id;
     }
@@ -57,7 +45,7 @@ private Set<ConcertHall> halls ;
 
 
     public static  boolean isCityValid(String checkCity ){
-        String cityRegex =  "^(?=.*[a-z])(?=.*[A-Z])$" ;
+        String cityRegex =  "^[a-zA-Z]*$" ;
         Pattern pat = Pattern.compile(cityRegex);
         if(checkCity == null)
             return  false ;

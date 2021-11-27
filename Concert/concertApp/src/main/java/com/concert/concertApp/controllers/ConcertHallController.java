@@ -88,6 +88,26 @@ public class ConcertHallController {
             return ResponseEntity.ok("City not found");
     }
 
+    @PostMapping("/city/save")
+    public  ResponseEntity<?> saveCity(String name ,
+                                       @RequestParam(required = false) Long id ){
+        City city  ;
+        try{
+            city = cityRepo.findById(id)
+                    .orElse(new City(name));
+
+            if(city != null)
+            {
+                city.setName(name);
+            }
+
+        }catch (Exception e){
+            return  new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
+        }
+
+        cityRepo.save(city);
+        return ResponseEntity.ok("City was save" );
+    }
 
     @GetMapping("/city/fetch")
     public List<City> getAllCitites() {
