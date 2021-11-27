@@ -21,8 +21,8 @@ public class ConcertHall {
     private  String conHallAdress ;
 
 
-    @Column(name = "con_hall_city")
-    private  String conHallCity ;
+//    @Column(name = "con_hall_city")
+//    private  String conHallCity ;
 
 
     @Column(name = "con_hall_capacity")
@@ -76,16 +76,16 @@ public class ConcertHall {
         this.conHallAdress = conHallAdress;
     }
 
-    public String getConHallCity() {
-        return conHallCity;
-    }
-
-    public void setConHallCity(String conHallCity) {
-//        if(city(conHallCity) == false ){
-//            throw  new ParameterMisuseException("Invalid city !");
-//        }
-        this.conHallCity = conHallCity;
-    }
+//    public String getConHallCity() {
+//        return conHallCity;
+//    }
+//
+//    public void setConHallCity(String conHallCity) {
+////        if(city(conHallCity) == false ){
+////            throw  new ParameterMisuseException("Invalid city !");
+////        }
+//        this.conHallCity = conHallCity;
+//    }
 
     public Long getConHallCapacity() {
         return conHallCapacity;
