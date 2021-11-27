@@ -1,5 +1,6 @@
 package com.concert.concertApp.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.procedure.ParameterMisuseException;
 import org.springframework.http.ResponseEntity;
 import javax.persistence.*;
@@ -20,24 +21,37 @@ public class ConcertHall {
     private  String conHallAdress ;
 
 
-    @Column(name = "con_hall_city")
-    private  String conHallCity ;
+//    @Column(name = "con_hall_city")
+//    private  String conHallCity ;
 
 
     @Column(name = "con_hall_capacity")
     private  Long conHallCapacity ;
 
+
+    @ManyToOne
+    @JoinColumn(name = "city_id" )
+    private City city ;
+
     public  ConcertHall(){
 
     }
 
-    public ConcertHall( String conHallName, String conHallAdress, String conHallCity, Long conHallCapacity)throws NoSuchAlgorithmException {
+    public ConcertHall( String conHallName, String conHallAdress,  Long conHallCapacity)throws NoSuchAlgorithmException {
 
         //this.con_hall_id = con_hall_id;
         this.conHallName = conHallName;
         this.conHallAdress = conHallAdress;
-        this.conHallCity = conHallCity;
+       // this.conHallCity = conHallCity;
         this.conHallCapacity = conHallCapacity;
+    }
+
+    public City getCity() {
+        return city;
+    }
+
+    public void setCity(City city) {
+        this.city = city;
     }
 
     public Long getConHallId() {
@@ -62,16 +76,16 @@ public class ConcertHall {
         this.conHallAdress = conHallAdress;
     }
 
-    public String getConHallCity() {
-        return conHallCity;
-    }
-
-    public void setConHallCity(String conHallCity) {
-//        if(city(conHallCity) == false ){
-//            throw  new ParameterMisuseException("Invalid city !");
-//        }
-        this.conHallCity = conHallCity;
-    }
+//    public String getConHallCity() {
+//        return conHallCity;
+//    }
+//
+//    public void setConHallCity(String conHallCity) {
+////        if(city(conHallCity) == false ){
+////            throw  new ParameterMisuseException("Invalid city !");
+////        }
+//        this.conHallCity = conHallCity;
+//    }
 
     public Long getConHallCapacity() {
         return conHallCapacity;
