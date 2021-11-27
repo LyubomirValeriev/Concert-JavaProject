@@ -70,14 +70,14 @@ public class ConcertHallController {
     }
     @DeleteMapping("/deleteHall")
     public ResponseEntity<?> deleteHall (String name , String city ){
-        Optional<ConcertHall> hall = concertHallRepo.findConcertHallByConHallCityAndConHallName(city , name);
+        Optional<ConcertHall> hall = concertHallRepo.findConcertHallByConHallName( name);
         if(hall.isEmpty()){
             return ResponseEntity.ok("Hall not found");
 
         }
 concertHallRepo.delete(hall.get()) ;
         return ResponseEntity.ok( "Concert hall with name : " + name +
-                " in city :" + city + "was deleted" );
+                "was deleted" );
         //return("Hall with name : " + name + "in " + city + " was deleted!");
 
 

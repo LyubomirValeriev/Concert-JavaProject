@@ -11,7 +11,7 @@ public interface ConcertHallRepository extends JpaRepository<ConcertHall , Long>
 {
     Optional<ConcertHall> findConcertHallByConHallId(Long id);
 
-    Optional<ConcertHall> findConcertHallByConHallName(String city , String name );
+    Optional<ConcertHall> findConcertHallByConHallName( String name );
 
 
     @Query("SELECT u FROM ConcertHall u WHERE u.conHallAdress = :adress" )
