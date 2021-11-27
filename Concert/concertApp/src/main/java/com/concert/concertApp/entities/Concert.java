@@ -1,5 +1,7 @@
 package com.concert.concertApp.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -10,12 +12,17 @@ import java.util.Set;
 public class Concert {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     private  Long id;
 
     private  String title;
     private  String description;
     private Double price;
     private Timestamp date;
+
+    @ManyToOne
+    @JoinColumn(name  = "conHallId")
+    private ConcertHall hall ;
 
     @ManyToMany
     @JoinTable(
@@ -25,9 +32,11 @@ public class Concert {
     )
     private Set<Performer> performers;
 
+
     public Concert() {
 
     }
+
 
     public Concert(String title, String description, Double price, Timestamp date) {
         this.title = title;
@@ -78,5 +87,13 @@ public class Concert {
 
     public void setPerformers(Set<Performer> performers) {
         this.performers = performers;
+    }
+
+    public ConcertHall getHall() {
+        return hall;
+    }
+
+    public void setHall(ConcertHall hall) {
+        this.hall = hall;
     }
 }
