@@ -11,7 +11,7 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private  Long reservationId ;
 
-
+// test
 //    @Column(name  = " user_id " )
 //
 //    @Column(name = "concert_id")
