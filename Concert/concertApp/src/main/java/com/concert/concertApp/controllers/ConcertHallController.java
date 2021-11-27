@@ -70,21 +70,26 @@ public class ConcertHallController {
     }
     @DeleteMapping("/deleteHall")
     public ResponseEntity<?> deleteHall (String name , String city ){
-        Optional<ConcertHall> hall = concertHallRepo.findConcertHallByConHallName( name);
-        if(hall.isEmpty()){
-            return ResponseEntity.ok("Hall not found");
 
-        }
-concertHallRepo.delete(hall.get()) ;
-        return ResponseEntity.ok( "Concert hall with name : " + name +
-                "was deleted" );
-        //return("Hall with name : " + name + "in " + city + " was deleted!");
+        Optional<City> city1 = cityRepo.findByName(city);
+        if(!city1.isEmpty()) {
 
+            Optional<ConcertHall> hall = concertHallRepo.findConcertHallByConHallName(name);
+            if (hall.isEmpty()) {
+                return ResponseEntity.ok("Hall not found");
 
+            }
+            concertHallRepo.delete(hall.get());
+            return ResponseEntity.ok("Concert hall with name : " + name + "in City" + city +
+                    "was deleted");
+            //return("Hall with name : " + name + "in " + city + " was deleted!");
+
+        }else
+            return ResponseEntity.ok("City not found");
     }
 
 
-    @GetMapping("/city/save")
+    @GetMapping("/city/fetch")
     public List<City> getAllCitites() {
         return cityRepo.findAll();
     }
