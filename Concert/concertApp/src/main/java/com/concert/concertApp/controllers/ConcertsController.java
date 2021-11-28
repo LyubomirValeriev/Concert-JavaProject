@@ -2,17 +2,16 @@ package com.concert.concertApp.controllers;
 
 import com.concert.concertApp.entities.Concert;
 import com.concert.concertApp.entities.Performer;
+import com.concert.concertApp.payload.request.ConcertRequest;
 import com.concert.concertApp.repositories.ConcertRepository;
 import com.concert.concertApp.repositories.PerformerRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.sql.Timestamp;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/concert")
@@ -29,19 +28,48 @@ public class ConcertsController {
     }
 
     @PostMapping("/save/performer")
-    public ResponseEntity<?> savePerformer(String name){
+    public ResponseEntity<?> persistPerformer(String name){
+        Performer performer = performerRepo.findPerformerByName(name);
+        if(performer != null){
+            return  ResponseEntity.ok("Performer already exists");
+        }
+
         return ResponseEntity.ok("Performer " + performerRepo.save(new Performer(name)).getName() + " saved successfully");
     }
 
     @PostMapping("/save/concert")
-    public  ResponseEntity<?> saveConcert(String title, String description, Double price, Timestamp date, String performerName){
-        Performer performer = performerRepo.findPerformerByName(performerName);
-        Concert concert = new Concert(title, description, price, date);
+    public  ResponseEntity<?> persistConcert(@RequestBody ConcertRequest concertRequest){
+        Set<Performer> performerSet = new HashSet<>();
+        for(String performerName: concertRequest.getPerformers()){
+            Performer performer = performerRepo.findPerformerByName(performerName);
+            if(performer == null){
+                return  ResponseEntity.ok("Performer does not exists!");
+            }
+            performerSet.add(performer);
+        }
 
-        Set<Performer> performers = new HashSet<>();
-        performers.add(performer);
-        concert.setPerformers(performers);
+        return ResponseEntity.ok("Concert " + concertRepo.save(new Concert(concertRequest.getTitle(),
+                                                                           concertRequest.getDescription(),
+                                                                           concertRequest.getPrice(),
+                                                                           concertRequest.getDate(),
+                                                                           performerSet)).getTitle()  + " saved successfully");
+    }
+    @GetMapping("filter/pages")
+    public ResponseEntity<?> getConcertPages(@RequestParam(required = false) String performerName,
+                                         @RequestParam(required = false) String concertTitle,
+                                         @RequestParam(defaultValue = "1") int currentPage,
+                                         @RequestParam(defaultValue = "5") int perPage){
 
-        return ResponseEntity.ok("Concert " + concertRepo.save(concert).getTitle() + " saved successfully");
+        Pageable pageable = PageRequest.of(currentPage-1, perPage);
+        Page<Concert> concertPages = concertRepo.fetchConcertByFilter(pageable,
+                                                performerName == null? null : performerName.toLowerCase(),
+                                                concertTitle == null? null :concertTitle.toLowerCase());
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("results", concertPages.getContent());
+        response.put("totalPages", concertPages.getTotalPages());
+        response.put("totalElements", concertPages.getTotalElements());
+
+        return  ResponseEntity.ok(response);
     }
 }

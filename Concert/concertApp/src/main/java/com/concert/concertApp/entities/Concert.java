@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.Set;
 
 @Entity
+@Table(name = "concerts")
 public class Concert {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,18 +26,14 @@ public class Concert {
     private Set<Performer> performers;
 
     public Concert() {
-
     }
 
-    public Concert(String title, String description, Double price, Timestamp date) {
+    public Concert(String title, String description, Double price, Timestamp date, Set<Performer> performers) {
         this.title = title;
         this.description = description;
         this.price = price;
         this.date = date;
-    }
-
-    public Long getId() {
-        return id;
+        this.performers = performers;
     }
 
     public String getTitle() {
