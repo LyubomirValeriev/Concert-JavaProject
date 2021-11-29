@@ -12,9 +12,9 @@ public class Reservation {
     private  Long reservationId ;
 
 
- //   @Column(name  = " user_id " )
-  // @Column(name = "concert_id")
-
+   @OneToOne
+   @JoinColumn(name = "user_Id")
+   private User  user ;
 
 
     @Column(name = "reservation_date")
@@ -31,6 +31,17 @@ public class Reservation {
     @ManyToOne
     @JoinColumn(name = "concertId")
     private Concert concert ;
+
+    @Column(name = "reservation_final_Price")
+    private Double reservationFinalPrice ;
+
+    public Double getReservationFinalPrice() {
+        return reservationFinalPrice;
+    }
+
+    public void setReservationFinalPrice(Double reservationFinalPrice) {
+        this.reservationFinalPrice = reservationFinalPrice;
+    }
 
     public Long getReservationId() {
         return reservationId;
@@ -66,9 +77,17 @@ public class Reservation {
         return concert;
     }
 
+
     public void setConcert(Concert concert) {
         this.concert = concert;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
 }

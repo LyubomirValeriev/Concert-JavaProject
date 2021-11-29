@@ -1,5 +1,6 @@
 package com.concert.concertApp.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.engine.query.ParameterRecognitionException;
 import org.springframework.http.ResponseEntity;
 
@@ -16,13 +17,16 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     private  Long Id;
 
     private String firstName;
     private String lastName;
     private Integer age;
     private String email;
+    @JsonIgnore
     private String username;
+    @JsonIgnore
     private String password;
 
 
