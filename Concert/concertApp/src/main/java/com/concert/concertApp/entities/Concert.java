@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -13,12 +14,14 @@ public class Concert {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
-    private  Long id;
+    private  Long concertId;
 
     private  String title;
     private  String description;
     private Double price;
     private Timestamp date;
+
+
 
     @ManyToOne
     @JoinColumn(name  = "conHallId")
@@ -46,7 +49,7 @@ public class Concert {
     }
 
     public Long getId() {
-        return id;
+        return concertId;
     }
 
     public String getTitle() {

@@ -11,6 +11,7 @@ import java.security.NoSuchAlgorithmException;
 public class ConcertHall {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     private  Long conHallId ;
 
 
@@ -22,11 +23,8 @@ public class ConcertHall {
     @Column(name = "con_hall_adress")
     private  String conHallAdress ;
 
-
-
-
-
     @Column(name = "con_hall_capacity")
+    @JsonIgnore
     private  Long conHallCapacity ;
 
 
