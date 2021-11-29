@@ -2,6 +2,8 @@ package com.concert.concertApp.entities;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Set;
 
 @Entity
@@ -52,7 +54,11 @@ public class Reservation {
     }
 
     public void setReservationDate(Timestamp reservationDate) {
-        this.reservationDate = reservationDate;
+        // ???
+//        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm") ;
+//        LocalDateTime date = LocalDateTime.parse((CharSequence) reservationDate, format);
+
+        this.reservationDate = reservationDate ;
     }
 
     public boolean isReservationPaid() {
