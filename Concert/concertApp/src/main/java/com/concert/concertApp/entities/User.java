@@ -8,6 +8,7 @@ import javax.persistence.*;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 
@@ -28,6 +29,11 @@ public class User {
     private String username;
     @JsonIgnore
     private String password;
+
+    @OneToMany
+    @JoinColumn(name = "reservationUserId")
+    private Set<Reservation> reservations ;
+
 
 
     public User(String firstName, String lastName, Integer age, String email, String username, String password)
@@ -123,5 +129,11 @@ public class User {
 
         return bigInt.toString(16);
     }
+    public Set<Reservation> getReservations() {
+        return reservations;
+    }
 
+    public void setReservations(Set<Reservation> reservations) {
+        this.reservations = reservations;
+    }
 }

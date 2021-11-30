@@ -1,7 +1,10 @@
 package com.concert.concertApp.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Set;
@@ -11,13 +14,8 @@ import java.util.Set;
 public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     private  Long reservationId ;
-
-
-   @OneToOne
-   @JoinColumn(name = "user_Id")
-   private User  user ;
-
 
     @Column(name = "reservation_date")
     private Timestamp reservationDate ;
@@ -30,12 +28,17 @@ public class Reservation {
     @Column(name = "reservation_discount")
     private boolean reservationDiscount ;
 
-    @ManyToOne
-    @JoinColumn(name = "concertId")
-    private Concert concert ;
 
     @Column(name = "reservation_final_Price")
     private Double reservationFinalPrice ;
+
+    @ManyToOne
+    @JoinColumn(name = "concertId")
+    private Concert concert ;
+    
+    @JsonIgnore
+    @Column(name = "reservationUserId")
+    private Integer  user ;
 
     public Double getReservationFinalPrice() {
         return reservationFinalPrice;
@@ -56,9 +59,9 @@ public class Reservation {
     public void setReservationDate(Timestamp reservationDate) {
         // ???
 //        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm") ;
-//        LocalDateTime date = LocalDateTime.parse((CharSequence) reservationDate, format);
+       LocalDateTime date =  reservationDate.toLocalDateTime();
 
-        this.reservationDate = reservationDate ;
+        this.reservationDate = reservationDate.from(Instant.now()) ;
     }
 
     public boolean isReservationPaid() {
@@ -88,11 +91,11 @@ public class Reservation {
         this.concert = concert;
     }
 
-    public User getUser() {
+    public Integer getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(Integer user) {
         this.user = user;
     }
 
