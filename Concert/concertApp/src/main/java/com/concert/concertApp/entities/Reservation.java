@@ -7,6 +7,7 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.Set;
 
 @Entity
@@ -18,7 +19,7 @@ public class Reservation {
     private  Long reservationId ;
 
     @Column(name = "reservation_date")
-    private Timestamp reservationDate ;
+    private Date reservationDate ;
 
 
     @Column(name = "reservation_ispaid")
@@ -35,7 +36,8 @@ public class Reservation {
     @ManyToOne
     @JoinColumn(name = "concertId")
     private Concert concert ;
-    
+
+    // username * по това да търсим кой ги е запазил а не по id
     @JsonIgnore
     @Column(name = "reservationUserId")
     private Integer  user ;
@@ -52,16 +54,16 @@ public class Reservation {
         return reservationId;
     }
 
-    public Timestamp getReservationDate() {
+    public Date getReservationDate() {
         return reservationDate;
     }
 
-    public void setReservationDate(Timestamp reservationDate) {
+    public void setReservationDate(Date reservationDate) {
         // ???
 //        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm") ;
-       LocalDateTime date =  reservationDate.toLocalDateTime();
 
-        this.reservationDate = reservationDate.from(Instant.now()) ;
+
+        this.reservationDate = reservationDate ;
     }
 
     public boolean isReservationPaid() {

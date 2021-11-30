@@ -9,7 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -41,24 +43,33 @@ public class ConcertHallController {
     }
     @PostMapping("/save")
     public ResponseEntity<?> saveHall(String name ,
-                                      String city ,
+                                      String city,
                                       Long capacity,
                                       String adress,
                                       @RequestParam(required = false) Long id ){
 
         ConcertHall hall = null ;
+        City city1 = null ;
 
         try {
 
             hall = concertHallRepo.findConcertHallByConHallId(id)
                     .orElse(new ConcertHall(name, adress,  capacity));
 
-            if (hall != null) {
+            if (hall.getConHallId() != null) {
                 hall.setConHallName(name);
                 hall.setConHallAdress(adress);
-               // hall.setConHallCity(city);
+                // hall.setConHallCity(city);
                 hall.setConHallCapacity(capacity);
-            }
+//
+//                Optional<City> city2 = cityRepo.findByName(city);
+//            if(city2.isEmpty()) {
+//                saveCity(city, id);
+//                city1 = cityRepo.findName(city);
+//            }
+//                city1 = cityRepo.findName(city);
+//                    hall.setCity(city1);
+           }
 
         }catch (Exception e ){
             return  new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
