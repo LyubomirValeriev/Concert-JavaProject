@@ -6,17 +6,20 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import java.util.List;
-
 public interface ConcertRepository extends JpaRepository<Concert, Long> {
-    Concert findConcertByTitle(String title);
 
-    @Query("SELECT c " +
+    @Query("SELECT c.title, c.description, max(c.price), c.date, max(p) " +
             "FROM Concert c JOIN c.performers p " +
-            "WHERE lower(p.name) " +
-            "LIKE :#{#performerName==null || #performerName.isEmptry()? '%' : '%'+#performerName+'%'} " +
-            "AND lower(c.title) " +
-            "LIKE :#{#concertTitle==null || #concertTitle.isEmptry()? '%' : '%'+#concertTitle+'%'}")
+            "WHERE lower(c.title) " +
+            "LIKE :#{#concertTitle.isEmpty()? '%' : #concertTitle + '%'} " +
+            "AND lower(p.name) " +
+            "LIKE :#{#performerName.isEmpty()? '%' : #performerName+'%'} " +
+            "GROUP BY c.title, c.price " +
+            "ORDER BY c.price ASC")
     Page<Concert> fetchConcertByFilter(Pageable pageable, String performerName, String concertTitle);
+
+    @Query("SELECT c FROM Concert  c " +
+           "WHERE lower(c.title) LIKE : #{#title + '%'} ")
+    Concert fetchConcertLikeTitle(String title);
 
 }

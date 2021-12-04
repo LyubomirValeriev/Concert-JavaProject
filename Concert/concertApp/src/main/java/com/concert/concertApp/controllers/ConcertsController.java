@@ -37,23 +37,31 @@ public class ConcertsController {
         return ResponseEntity.ok("Performer " + performerRepo.save(new Performer(name)).getName() + " saved successfully");
     }
 
+    private  Performer persistNewPerformerByName(String performerName){
+        return  performerRepo.save(new Performer(performerName));
+    }
+
     @PostMapping("/save/concert")
     public  ResponseEntity<?> persistConcert(@RequestBody ConcertRequest concertRequest){
         Set<Performer> performerSet = new HashSet<>();
         for(String performerName: concertRequest.getPerformers()){
-            Performer performer = performerRepo.findPerformerByName(performerName);
-            if(performer == null){
-                return  ResponseEntity.ok("Performer does not exists!");
-            }
+            Performer performer = performerRepo.fetchPerformerLikeName(performerName.toLowerCase(Locale.ROOT))
+                    .orElseGet(() -> persistNewPerformerByName(performerName));
+
             performerSet.add(performer);
         }
 
+        Concert concertInDB = concertRepo.fetchConcertLikeTitle(concertRequest.getTitle().toLowerCase());
+        if (concertInDB != null){
+            return  ResponseEntity.ok("Concert already exist");
+        }
         return ResponseEntity.ok("Concert " + concertRepo.save(new Concert(concertRequest.getTitle(),
                                                                            concertRequest.getDescription(),
                                                                            concertRequest.getPrice(),
                                                                            concertRequest.getDate(),
                                                                            performerSet)).getTitle()  + " saved successfully");
     }
+
     @GetMapping("filter/pages")
     public ResponseEntity<?> getConcertPages(@RequestParam(required = false) String performerName,
                                          @RequestParam(required = false) String concertTitle,
