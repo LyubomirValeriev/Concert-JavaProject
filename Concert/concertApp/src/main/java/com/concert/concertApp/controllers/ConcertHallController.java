@@ -2,8 +2,12 @@ package com.concert.concertApp.controllers;
 
 import com.concert.concertApp.entities.City;
 import com.concert.concertApp.entities.ConcertHall;
+import com.concert.concertApp.entities.User;
 import com.concert.concertApp.repositories.CityRepository;
 import com.concert.concertApp.repositories.ConcertHallRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -52,9 +56,14 @@ public class ConcertHallController {
         City city1 = null ;
 
         try {
+            city1 = cityRepo.findByName(city).
+                    orElse(new City(city));
 
+            if(city1.getId() == null ){
+                cityRepo.save(city1);
+            }
             hall = concertHallRepo.findConcertHallByConHallId(id)
-                    .orElse(new ConcertHall(name, adress,  capacity));
+                    .orElse(new ConcertHall(name, adress,  capacity , city1));
 
             if (hall.getConHallId() != null) {
                 hall.setConHallName(name);
@@ -124,4 +133,24 @@ public class ConcertHallController {
     public List<City> getAllCitites() {
         return cityRepo.findAll();
     }
+
+//    @GetMapping("/pages")
+//    public ResponseEntity<?> filterHalls( @RequestParam(defaultValue = "") String conHallName,
+//                                          @RequestParam(defaultValue = "") String adress,
+//                                          @RequestParam(defaultValue = "") int currentPage,
+//                                          @RequestParam(defaultValue = "") int perPage){
+//
+//        Pageable pageable = PageRequest.of(currentPage - 1, perPage);
+//    //    Page<ConcertHall> results = concertHallRepo.filterHallPages(pageable, conHallName.toLowerCase(), adress.toLowerCase());
+//
+//
+//
+//        Map<String, Object> response = new HashMap();
+//        response.put("totalElements", results.getTotalElements());
+//        response.put("totalPages", results.getTotalPages());
+//        response.put("users", results.getContent());
+//
+//return  ResponseEntity.ok(response);
+//    }
+
 }
