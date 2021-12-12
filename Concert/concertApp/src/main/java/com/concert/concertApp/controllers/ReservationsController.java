@@ -45,10 +45,10 @@ public class ReservationsController {
      return  ResponseEntity.ok("Резервацията с id:" + id + " е изтрита ");
  }
 
- @PostMapping
+ @PostMapping("/save")
     public ResponseEntity<?> saveReservation (Long userId,
                                               Long concertId) {
-Reservation reservation = null ;
+Reservation reservation = null;
      Concert concert = null;
      User user = null;
      try {
@@ -58,7 +58,17 @@ Reservation reservation = null ;
          user = userRepo.findUserById(userId)
                  .orElseThrow(() -> new IllegalArgumentException());
 
-         if (concert != null && user != null) {
+         if (concert.getId() != null
+                 && user.getId() != null) {
+             double a = 0.1 ;
+             reservation = new Reservation(
+                     new Date(System.currentTimeMillis()),
+                     true,
+                     true,
+                     (double) 0,
+                     concert,
+                     user
+             );
 reservation.setUser(user);
 reservation.setConcert(concert);
 reservation.setReservationDate( new Date(System.currentTimeMillis()));
@@ -66,7 +76,12 @@ reservation.setReservationPaid(true);
 
          }
 
-     } catch (Exception e) {
+     }
+     catch (IllegalArgumentException t) {
+         return  new ResponseEntity<>("Няма такъв концерт/протребител с такова id", HttpStatus.OK);
+
+
+     }catch (Exception e) {
          return  new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
      }
  reservationRepo.save(reservation);

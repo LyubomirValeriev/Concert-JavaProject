@@ -31,8 +31,9 @@ public class User {
     @JsonIgnore
     private String password;
 
+
 @OneToMany(mappedBy = "user")
-private Set<Reservation> user;
+private Set<Reservation> reservations;
 
 
 
@@ -135,4 +136,12 @@ private Set<Reservation> user;
     }
 
 
+
+    public Set<Reservation> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(Set<Reservation> reservations) {
+        this.reservations = reservations;
+    }
 }
