@@ -17,18 +17,17 @@ public interface ConcertHallRepository extends JpaRepository<ConcertHall , Long>
     Optional<ConcertHall> findConcertHallByConHallName( String name );
 
 
-//    @Query("SELECT u " +
-//            "FROM ConcertHall u JOIN u.city i  " +
-//            "WHERE " +
-//            "lower(u.conHallName) " +
-//            "LIKE :#{#conHallName == null || #conHallName.isEmpty()? '%' : #conHallName+'%'} " +
-//            "AND lower(u.conHallAdress) " +
-//            "LIKE :#{#conHallAdress == null || #conHallAdress.isEmpty()? '%' : #conHallAdress+'%'}"+
-//            "AND "+
-//            "AND lower(i.name)" +
-//            "LIKE :#{# city == null || #city.isEmpty()? '%' : #city+'%'}"
-//    )
-//    Page<ConcertHall> filterHallPages(Pageable pageable, String name , String adress);
+    @Query("SELECT u.conHallAdress, u.conHallName, max(u.conHallCapacity) , max(i) " +
+            "FROM ConcertHall u JOIN u.city i  " +
+            "WHERE lower(u.conHallName) " +
+            "LIKE :#{#name.isEmpty()? '%' : #name+'%'} " +
+            "AND lower(u.conHallAdress) " +
+            "LIKE :#{#adress.isEmpty()? '%' : #adress+'%'} " +
+//            "AND lower(i.name) " +
+//            "LIKE :#{#city.isEmpty()? '%' : #city+'%'} " +
+            "GROUP BY u.conHallAdress, u.conHallName, u.conHallCapacity " +
+            "ORDER BY u.conHallCapacity ASC")
+    Page<ConcertHall> filterHallPages(Pageable pageable, String name , String adress);
 
     @Query("SELECT u FROM ConcertHall u WHERE u.conHallAdress = :adress" )
     Optional<ConcertHall> findConcertHallByConHallAdress(String adress);

@@ -71,14 +71,7 @@ public class ConcertHallController {
                 hall.setConHallAdress(adress);
                 // hall.setConHallCity(city);
                 hall.setConHallCapacity(capacity);
-//
-//                Optional<City> city2 = cityRepo.findByName(city);
-//            if(city2.isEmpty()) {
-//                saveCity(city, id);
-//                city1 = cityRepo.findName(city);
-//            }
-//                city1 = cityRepo.findName(city);
-//                    hall.setCity(city1);
+
            }
 
         }catch (Exception e ){
@@ -90,7 +83,9 @@ public class ConcertHallController {
 
     }
     @DeleteMapping("/deleteHall")
-    public ResponseEntity<?> deleteHall (String name , String city ){
+    public ResponseEntity<?> deleteHall (
+            String name ,
+            String city ){
 
         Optional<City> city1 = cityRepo.findByName(city);
         if(!city1.isEmpty()) {
@@ -101,8 +96,8 @@ public class ConcertHallController {
 
             }
             concertHallRepo.delete(hall.get());
-            return ResponseEntity.ok("Concert hall with name : " + name + "in City" + city +
-                    "was deleted");
+            return ResponseEntity.ok("Concert hall with name : " + name + " in City " + city +
+                    " was deleted");
             //return("Hall with name : " + name + "in " + city + " was deleted!");
 
         }else
@@ -135,23 +130,26 @@ public class ConcertHallController {
         return cityRepo.findAll();
     }
 
-//    @GetMapping("/pages")
-//    public ResponseEntity<?> filterHalls( @RequestParam(defaultValue = "") String conHallName,
-//                                          @RequestParam(defaultValue = "") String adress,
-//                                          @RequestParam(defaultValue = "") int currentPage,
-//                                          @RequestParam(defaultValue = "") int perPage){
-//
-//        Pageable pageable = PageRequest.of(currentPage - 1, perPage);
-//    //    Page<ConcertHall> results = concertHallRepo.filterHallPages(pageable, conHallName.toLowerCase(), adress.toLowerCase());
-//
-//
-//
-//        Map<String, Object> response = new HashMap();
-//        response.put("totalElements", results.getTotalElements());
-//        response.put("totalPages", results.getTotalPages());
-//        response.put("users", results.getContent());
-//
-//return  ResponseEntity.ok(response);
-//    }
+    @GetMapping("/pages")
+    public ResponseEntity<?> filterHalls( @RequestParam(defaultValue = "") String conHallName,
+                                          @RequestParam(defaultValue = "") String adress,
+                                          @RequestParam(defaultValue = "1") int currentPage,
+                                          @RequestParam(defaultValue = "5") int perPage){
+
+        Pageable pageable = PageRequest.of(currentPage - 1, perPage);
+       Page<ConcertHall> results = concertHallRepo.filterHallPages(
+               pageable,
+               conHallName.toLowerCase(),
+               adress.toLowerCase());
+
+
+
+        Map<String, Object> response = new HashMap();
+        response.put("totalElements", results.getTotalElements());
+        response.put("totalPages", results.getTotalPages());
+        response.put("halls", results.getContent());
+
+return  ResponseEntity.ok(response);
+    }
 
 }

@@ -31,13 +31,16 @@ public class User {
     @JsonIgnore
     private String password;
 
-    @OneToMany
-    @JoinColumn(name = "reservationUserId")
-    private Set<Reservation> reservations ;
+@OneToMany(mappedBy = "user")
+private Set<Reservation> user;
 
 
 
-    public User(String firstName, String lastName, Integer age, String email, String username, String password)
+
+    public User(String firstName,
+                String lastName, Integer age,
+                String email, String username,
+                String password)
             throws NoSuchAlgorithmException {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -130,11 +133,6 @@ public class User {
 
         return bigInt.toString(16);
     }
-    public Set<Reservation> getReservations() {
-        return reservations;
-    }
 
-    public void setReservations(Set<Reservation> reservations) {
-        this.reservations = reservations;
-    }
+
 }

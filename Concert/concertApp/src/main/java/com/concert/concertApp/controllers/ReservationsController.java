@@ -2,12 +2,16 @@ package com.concert.concertApp.controllers;
 
 import com.concert.concertApp.entities.Concert;
 import com.concert.concertApp.entities.Reservation;
+import com.concert.concertApp.entities.User;
 import com.concert.concertApp.repositories.ConcertHallRepository;
 import com.concert.concertApp.repositories.ConcertRepository;
 import com.concert.concertApp.repositories.ReservationRepository;
+import com.concert.concertApp.repositories.UserRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,10 +22,12 @@ import java.util.Optional;
 public class ReservationsController {
     private final ReservationRepository reservationRepo ;
     private final ConcertRepository concertsRepo ;
+    private final UserRepository userRepo ;
 
- ReservationsController(ReservationRepository reservationRepo , ConcertRepository concertRepo){
+ ReservationsController(ReservationRepository reservationRepo , ConcertRepository concertRepo, UserRepository userRepo){
      this.reservationRepo = reservationRepo ;
      this.concertsRepo = concertRepo  ;
+     this.userRepo = userRepo ;
  }
 
  @GetMapping("/fetch")
@@ -39,4 +45,31 @@ public class ReservationsController {
      return  ResponseEntity.ok("Резервацията с id:" + id + " е изтрита ");
  }
 
+ @PostMapping
+    public ResponseEntity<?> saveReservation (Long userId,
+                                              Long concertId) {
+Reservation reservation = null ;
+     Concert concert = null;
+     User user = null;
+     try {
+         concert = concertsRepo.findById(concertId)
+                 .orElseThrow(() -> new IllegalArgumentException());
+
+         user = userRepo.findUserById(userId)
+                 .orElseThrow(() -> new IllegalArgumentException());
+
+         if (concert != null && user != null) {
+reservation.setUser(user);
+reservation.setConcert(concert);
+reservation.setReservationDate( new Date(System.currentTimeMillis()));
+reservation.setReservationPaid(true);
+
+         }
+
+     } catch (Exception e) {
+         return  new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
+     }
+ reservationRepo.save(reservation);
+     return  ResponseEntity.ok("Резервацията беше успешно запазена") ;
+ }
 }

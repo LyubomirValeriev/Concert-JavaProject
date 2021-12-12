@@ -38,9 +38,28 @@ public class Reservation {
     private Concert concert ;
 
     // username * по това да търсим кой ги е запазил а не по id
-    @JsonIgnore
-    @Column(name = "reservationUserId")
-    private Integer  user ;
+    @ManyToOne
+    @JoinColumn(name = "users_Id")
+    private User  user ;
+
+    public Reservation() {
+    }
+
+    public Reservation(Date reservationDate,
+                       boolean reservationPaid,
+                       boolean reservationDiscount,
+                       Double reservationFinalPrice,
+                       Concert concert,
+                       User user
+                       ) {
+        this.reservationDate = reservationDate;
+        this.reservationPaid = reservationPaid;
+        this.reservationDiscount = reservationDiscount;
+        this.reservationFinalPrice = reservationFinalPrice;
+        this.concert = concert;
+        this.user = user ;
+
+    }
 
     public Double getReservationFinalPrice() {
         return reservationFinalPrice;
@@ -82,8 +101,7 @@ public class Reservation {
         this.reservationDiscount = reservationDiscount;
     }
 
-    public Reservation() {
-    }
+
     public Concert getConcert() {
         return concert;
     }
@@ -93,12 +111,11 @@ public class Reservation {
         this.concert = concert;
     }
 
-    public Integer getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(Integer user) {
+    public void setUser(User user) {
         this.user = user;
     }
-
 }

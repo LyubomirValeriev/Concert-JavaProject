@@ -36,13 +36,21 @@ public class ConcertHall {
 
     }
 
-    public ConcertHall( String conHallName, String conHallAdress,  Long conHallCapacity , City city)throws NoSuchAlgorithmException {
+    public ConcertHall( String conHallName,
+                        String conHallAdress,
+                        Long conHallCapacity
+            , City city)throws NoSuchAlgorithmException {
 
         //this.con_hall_id = con_hall_id;
         this.conHallName = conHallName;
         this.conHallAdress = conHallAdress;
         this.city = city;
         this.conHallCapacity = conHallCapacity;
+    }
+
+    public ConcertHall(String conHallName, String conHallAdress) {
+        this.conHallName = conHallName;
+        this.conHallAdress = conHallAdress;
     }
 
     public City getCity() {
