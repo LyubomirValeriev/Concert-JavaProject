@@ -6,6 +6,7 @@ import com.concert.concertApp.entities.User;
 import com.concert.concertApp.payload.ConcertHallRequest;
 import com.concert.concertApp.repositories.CityRepository;
 import com.concert.concertApp.repositories.ConcertHallRepository;
+import org.hibernate.engine.query.ParameterRecognitionException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -51,7 +52,7 @@ public class ConcertHallController {
     public  ResponseEntity<?> saveConHall(
             @RequestBody ConcertHallRequest conHallRequest){
 
-     
+
 
         if(conHallRequest.getAdress() == null
                 || conHallRequest.getAdress().isEmpty())
@@ -86,6 +87,9 @@ public class ConcertHallController {
         }
         catch (DataIntegrityViolationException e) {
             return ResponseEntity.ok("Не сте въвели всички елементи, опитайте отново!");
+        }
+        catch (ParameterRecognitionException e) {
+            return  ResponseEntity.ok( e.getMessage()) ;
         }
         catch (Exception e ){
             return ResponseEntity.ok(e.getMessage());

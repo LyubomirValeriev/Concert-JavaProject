@@ -20,16 +20,16 @@ public class ConcertHall {
 
 
 
-    @Column(name = "con_hall_name",nullable = false)
+    @Column(name = "con_hall_name",nullable = false, length =  40)
     private  String conHallName ;
 
 
-    @Column(name = "con_hall_adress",nullable = false)
+    @Column(name = "con_hall_adress",nullable = false , length =  30)
     private  String conHallAdress ;
 
     @Column(name = "con_hall_capacity",nullable = false)
     @JsonIgnore
-    private  Long conHallCapacity ;
+    private  String conHallCapacity ;
 
 
     @ManyToOne
@@ -43,14 +43,13 @@ public class ConcertHall {
 
     public ConcertHall( String conHallName,
                         String conHallAdress,
-                        Long conHallCapacity
+                        String conHallCapacity
             , City city) {
 
-        //this.con_hall_id = con_hall_id;
-        this.conHallName = conHallName;
-        this.conHallAdress = conHallAdress;
-        this.city = city;
-        this.conHallCapacity = conHallCapacity;
+            this.conHallName = conHallName;
+            this.conHallAdress = conHallAdress;
+            this.city = city;
+            this.conHallCapacity = conHallCapacity;
     }
 
     public ConcertHall(String conHallName, String conHallAdress) {
@@ -73,7 +72,9 @@ public class ConcertHall {
 
 
     public String getConHallName() {
-
+        if(isNameValid(conHallName) == false )
+            throw  new ParameterRecognitionException("Моля въведете името отново <3") ;
+        else
         return conHallName;
     }
 
@@ -99,7 +100,7 @@ public class ConcertHall {
         return conHallCapacity;
     }
 
-    public void setConHallCapacity(Long conHallCapacity) {
+    public void setConHallCapacity(String conHallCapacity) {
         if(conHallCapacity <= 0){
             throw  new ParameterMisuseException("Capacity cannot be 0 or negative number");
 
@@ -118,7 +119,11 @@ public class ConcertHall {
         return  pat.matcher(checkCity).matches();
     }
 
-
+ public static  boolean isValidNumber(String capacity){
+        try {
+            
+        }
+ }
 
 //  //  public static boolean city( String c ) {
 //        return c.matches( "([a - zA - Z] + |[a - zA - Z] + \\s[a - zA - Z] + )" );
