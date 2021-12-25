@@ -1,10 +1,14 @@
 package com.concert.concertApp.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.engine.query.ParameterRecognitionException;
 import org.hibernate.procedure.ParameterMisuseException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
+
 import javax.persistence.*;
 import java.security.NoSuchAlgorithmException;
+import java.util.regex.Pattern;
 
 @Entity
 @Table(name = "concertHall")
@@ -16,20 +20,21 @@ public class ConcertHall {
 
 
 
-    @Column(name = "con_hall_name")
+    @Column(name = "con_hall_name",nullable = false)
     private  String conHallName ;
 
 
-    @Column(name = "con_hall_adress")
+    @Column(name = "con_hall_adress", nullable = false)
     private  String conHallAdress ;
 
-    @Column(name = "con_hall_capacity")
+    @Column(name = "con_hall_capacity",nullable = false)
     @JsonIgnore
     private  Long conHallCapacity ;
 
 
     @ManyToOne
     @JoinColumn(name = "city_id" )
+    @NonNull
     private City city ;
 
     public  ConcertHall(){
@@ -39,7 +44,7 @@ public class ConcertHall {
     public ConcertHall( String conHallName,
                         String conHallAdress,
                         Long conHallCapacity
-            , City city)throws NoSuchAlgorithmException {
+            , City city) {
 
         //this.con_hall_id = con_hall_id;
         this.conHallName = conHallName;
@@ -68,11 +73,16 @@ public class ConcertHall {
 
 
     public String getConHallName() {
+
         return conHallName;
     }
 
     public void setConHallName(String conHallName) {
-        this.conHallName = conHallName;
+
+        if(isNameValid(conHallName) == false )
+            throw  new ParameterRecognitionException(" <3") ;
+
+        this.conHallName = conHallName.trim();
     }
 
     public String getConHallAdress() {
@@ -100,7 +110,13 @@ public class ConcertHall {
         }
         this.conHallCapacity = conHallCapacity;
     }
-
+    public static  boolean isNameValid(String checkCity ){
+        String nameRegex =  "^[a-zA-Z]*$" ;
+        Pattern pat = Pattern.compile(nameRegex);
+        if(checkCity == null)
+            return  false ;
+        return  pat.matcher(checkCity).matches();
+    }
 
 
 

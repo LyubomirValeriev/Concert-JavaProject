@@ -32,5 +32,7 @@ public interface ConcertHallRepository extends JpaRepository<ConcertHall , Long>
     @Query("SELECT u FROM ConcertHall u WHERE u.conHallAdress = :adress" )
     Optional<ConcertHall> findConcertHallByConHallAdress(String adress);
 
+    @Query("SELECT u FROM ConcertHall u WHERE u.conHallAdress = :adress" )
+    ConcertHall findConcertHallByAdress(String adress);
 
 }
