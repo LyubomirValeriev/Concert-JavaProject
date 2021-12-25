@@ -24,7 +24,7 @@ public class ConcertHall {
     private  String conHallName ;
 
 
-    @Column(name = "con_hall_adress", nullable = false)
+    @Column(name = "con_hall_adress",nullable = false)
     private  String conHallAdress ;
 
     @Column(name = "con_hall_capacity",nullable = false)
@@ -80,7 +80,7 @@ public class ConcertHall {
     public void setConHallName(String conHallName) {
 
         if(isNameValid(conHallName) == false )
-            throw  new ParameterRecognitionException(" <3") ;
+            throw  new ParameterRecognitionException("Въведете име <3") ;
 
         this.conHallName = conHallName.trim();
     }

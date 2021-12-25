@@ -51,13 +51,11 @@ public class ConcertHallController {
     public  ResponseEntity<?> saveConHall(
             @RequestBody ConcertHallRequest conHallRequest){
 
+     
 
-        City cityInDB = cityRepo.findByName(conHallRequest.getCity())
-                .orElse(new City(conHallRequest.getCity())) ;
-        if(cityInDB.getId() == null)
-        {
-            cityRepo.save(cityInDB);
-        }
+        if(conHallRequest.getAdress() == null
+                || conHallRequest.getAdress().isEmpty())
+            return ResponseEntity.ok( "Моля въведете адрес  ");
 
         ConcertHall concertHallInDb = concertHallRepo.findConcertHallByAdress(conHallRequest.getAdress());
 //                .orElse(new ConcertHall(conHallRequest.getConHallName() ,
@@ -67,6 +65,12 @@ public class ConcertHallController {
         if(concertHallInDb != null)
             return  ResponseEntity.ok("Концертна зала на този адрес вече е запаметена");
 
+        City cityInDB = cityRepo.findByName(conHallRequest.getCity())
+                .orElse(new City(conHallRequest.getCity())) ;
+        if(cityInDB.getId() == null)
+        {
+            cityRepo.save(cityInDB);
+        }
 
         try {
 
