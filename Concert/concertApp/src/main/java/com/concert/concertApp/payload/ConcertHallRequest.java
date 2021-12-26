@@ -13,7 +13,7 @@ public class ConcertHallRequest {
 
     String city ;
 
-    Long capacity ;
+    String capacity ;
 
     String adress ;
 
@@ -35,14 +35,12 @@ public class ConcertHallRequest {
         this.city = city;
     }
 
-    public Long getCapacity() {
+    public String getCapacity() {
         return capacity;
     }
 
-    public void setCapacity(Long capacity) {
-        if(capacity <= 0){
+    public void setCapacity(String capacity) {
 
-        }
         this.capacity = capacity;
     }
 

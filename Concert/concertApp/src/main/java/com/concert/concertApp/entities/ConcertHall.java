@@ -46,15 +46,19 @@ public class ConcertHall {
                         String conHallCapacity
             , City city) {
 
-            this.conHallName = conHallName;
+        this.setConHallName(conHallName);
+           // this.conHallName = conHallName;
+
             this.conHallAdress = conHallAdress;
             this.city = city;
-            this.conHallCapacity = conHallCapacity;
+            this.setConHallCapacity(conHallCapacity);
+            //this.conHallCapacity = conHallCapacity;
     }
 
-    public ConcertHall(String conHallName, String conHallAdress) {
+    public ConcertHall(String conHallName, String conHallAdressm ,String conHallCapacity ) {
         this.conHallName = conHallName;
         this.conHallAdress = conHallAdress;
+        this.conHallCapacity = conHallCapacity ;
     }
 
     public City getCity() {
@@ -72,16 +76,13 @@ public class ConcertHall {
 
 
     public String getConHallName() {
-        if(isNameValid(conHallName) == false )
-            throw  new ParameterRecognitionException("Моля въведете името отново <3") ;
-        else
         return conHallName;
     }
 
     public void setConHallName(String conHallName) {
 
         if(isNameValid(conHallName) == false )
-            throw  new ParameterRecognitionException("Въведете име <3") ;
+            throw  new ParameterRecognitionException("Въведете правилно име <3") ;
 
         this.conHallName = conHallName.trim();
     }
@@ -96,15 +97,22 @@ public class ConcertHall {
 
 
 
-    public Long getConHallCapacity() {
+    public String getConHallCapacity() {
         return conHallCapacity;
     }
 
     public void setConHallCapacity(String conHallCapacity) {
-        if(conHallCapacity <= 0){
+      Integer conCap = 0 ;
+        if(isValidNumber(conHallCapacity) == false ){
+            throw  new ParameterMisuseException("Моля въведете само числа за капацитета на залата  !") ;
+        }
+        else {
+            conCap = Integer.parseInt(conHallCapacity);
+        }
+        if(conCap <= 0){
             throw  new ParameterMisuseException("Capacity cannot be 0 or negative number");
 
-        }else if(conHallCapacity != conHallCapacity.intValue() ){
+        }else if(conCap != conCap.intValue() ){
             //  conHallCapacity != (int)conHallCapacity
 //            conHallCapacity != conHallCapacity.intValue()
             throw  new ParameterMisuseException("The number must be an integer!");
@@ -121,9 +129,12 @@ public class ConcertHall {
 
  public static  boolean isValidNumber(String capacity){
         try {
-
-        }
+            Integer.parseInt(capacity);
+            return true;
+        }catch (Exception e){
+            return  false;
  }
+    }
 
 //  //  public static boolean city( String c ) {
 //        return c.matches( "([a - zA - Z] + |[a - zA - Z] + \\s[a - zA - Z] + )" );

@@ -58,6 +58,7 @@ public class ConcertHallController {
                 || conHallRequest.getAdress().isEmpty())
             return ResponseEntity.ok( "Моля въведете адрес  ");
 
+
         ConcertHall concertHallInDb = concertHallRepo.findConcertHallByAdress(conHallRequest.getAdress());
 //                .orElse(new ConcertHall(conHallRequest.getConHallName() ,
 //                        conHallRequest.getAdress(),
@@ -65,6 +66,10 @@ public class ConcertHallController {
 //                        cityInDB));
         if(concertHallInDb != null)
             return  ResponseEntity.ok("Концертна зала на този адрес вече е запаметена");
+
+        concertHallInDb = concertHallRepo.findConcertHallByName(conHallRequest.getConHallName()) ;
+        if(concertHallInDb != null)
+            return  ResponseEntity.ok("Концертна зала с това име вече съществува вече е запаметена");
 
         City cityInDB = cityRepo.findByName(conHallRequest.getCity())
                 .orElse(new City(conHallRequest.getCity())) ;
@@ -78,7 +83,7 @@ public class ConcertHallController {
             ConcertHall concertHall  = new ConcertHall(
               conHallRequest.getConHallName(),
                conHallRequest.getAdress(),
-               conHallRequest.getCapacity(),
+               String.valueOf(conHallRequest.getCapacity()),
                cityInDB
          );
          concertHallRepo.save( concertHall);

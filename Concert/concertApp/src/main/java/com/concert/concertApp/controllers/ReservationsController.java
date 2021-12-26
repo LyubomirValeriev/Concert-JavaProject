@@ -48,7 +48,7 @@ public class ReservationsController {
  @PostMapping("/save")
     public ResponseEntity<?> saveReservation (Long userId,
                                               Long concertId) {
-Reservation reservation = null;
+
      Concert concert = null;
      User user = null;
      try {
@@ -57,7 +57,7 @@ Reservation reservation = null;
 
          user = userRepo.findUserById(userId)
                  .orElseThrow(() -> new IllegalArgumentException());
-
+         Reservation reservation = null ;
          if (concert.getId() != null
                  && user.getId() != null) {
              double a = 0.1 ;
@@ -69,12 +69,14 @@ Reservation reservation = null;
                      concert,
                      user
              );
-reservation.setUser(user);
-reservation.setConcert(concert);
-reservation.setReservationDate( new Date(System.currentTimeMillis()));
-reservation.setReservationPaid(true);
+             reservation.setUser(user);
+             reservation.setConcert(concert);
+             reservation.setReservationDate( new Date(System.currentTimeMillis()));
+             reservation.setReservationPaid(true);
 
          }
+         reservationRepo.save(reservation);
+         return  ResponseEntity.ok("Резервацията беше успешно запазена") ;
 
      }
      catch (IllegalArgumentException t) {
@@ -84,7 +86,7 @@ reservation.setReservationPaid(true);
      }catch (Exception e) {
          return  new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
      }
- reservationRepo.save(reservation);
-     return  ResponseEntity.ok("Резервацията беше успешно запазена") ;
+
+
  }
 }

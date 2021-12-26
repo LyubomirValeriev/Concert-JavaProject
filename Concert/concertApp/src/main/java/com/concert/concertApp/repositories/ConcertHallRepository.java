@@ -23,8 +23,8 @@ public interface ConcertHallRepository extends JpaRepository<ConcertHall , Long>
             "LIKE :#{#name.isEmpty()? '%' : #name+'%'} " +
             "AND lower(u.conHallAdress) " +
             "LIKE :#{#adress.isEmpty()? '%' : #adress+'%'} " +
-//            "AND lower(i.name) " +
-//            "LIKE :#{#city.isEmpty()? '%' : #city+'%'} " +
+       //     "AND lower(i.name) " +
+       //     "LIKE :#{#city.isEmpty()? '%' : #city+'%'} " +
             "GROUP BY u.conHallAdress, u.conHallName, u.conHallCapacity " +
             "ORDER BY u.conHallCapacity ASC")
     Page<ConcertHall> filterHallPages(Pageable pageable, String name , String adress);
@@ -35,4 +35,6 @@ public interface ConcertHallRepository extends JpaRepository<ConcertHall , Long>
     @Query("SELECT u FROM ConcertHall u WHERE u.conHallAdress = :adress" )
     ConcertHall findConcertHallByAdress(String adress);
 
+    @Query("SELECT u FROM ConcertHall u WHERE u.conHallName = :name" )
+    ConcertHall findConcertHallByName(String name);
 }
