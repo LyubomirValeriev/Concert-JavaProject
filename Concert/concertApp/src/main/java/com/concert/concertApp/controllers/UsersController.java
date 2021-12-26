@@ -2,16 +2,17 @@ package com.concert.concertApp.controllers;
 
 import com.concert.concertApp.entities.User;
 import com.concert.concertApp.repositories.UserRepository;
+import org.hibernate.PropertyValueException;
 import org.hibernate.engine.query.ParameterRecognitionException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -26,38 +27,36 @@ public class UsersController {
         userRepo = userRepository;
     }
 
-    @GetMapping("/fetch")
-    public List<User> getAllUsers() {
-        return userRepo.findAll();
-    }
-
     @GetMapping("/find/email")
     public ResponseEntity<?> findUserByEmail(String email){
-        Optional<User> result = userRepo.findUserByEmail(email);
+        Optional<User> result = userRepo.findUserByEmail(email.trim());
 
         return result.isPresent()?ResponseEntity.ok(result.get()) : ResponseEntity.ok("Not found user with email: " + email);
     }
 
     @GetMapping("/find/id")
-    public ResponseEntity<?> findUserById(Long id) {
-        User user = null;
+    public ResponseEntity<?> findUserById(Long id) { //проверката за ид остава част от фронтенда
         try {
-            user = userRepo.findUserById(id).get();
+           User user = userRepo.findUserById(id).get();
+            return new ResponseEntity<>(user, HttpStatus.OK);
         }catch (Exception i) {
             return new ResponseEntity<>(i.getClass().getName(), HttpStatus.OK);
         }
-        return new ResponseEntity<>(user, HttpStatus.OK);
-
-        //Optional<User> result = userRepo.findUserById(id);
-        // return  result.isPresent()?ResponseEntity.ok(result.get()) : ResponseEntity.ok("Not found user with id: " + id + "!");
     }
 
     @PostMapping("/save")
-    public ResponseEntity<?> persistUser(String fname, String lname, Integer age, String email, String usrname, String pass, @RequestParam(required = false) Long id) {
-       User user = null;
+    public ResponseEntity<?> persistUser(String fname, String lname, String age, String email, String usrname, String pass, @RequestParam(required = false) Long id)
+            throws PropertyValueException {
+        User resultUsrname = userRepo.checkUniqueUsrname(usrname.trim());
+        if (resultUsrname != null)
+            return ResponseEntity.ok("Username " + usrname + " is already taken.");
+
+        User resultEmail = userRepo.checkUniqueEmail(email.trim());
+        if (resultEmail != null)
+            return ResponseEntity.ok("Email " + email + " is already exist.");
 
         try {
-          user  = userRepo.findUserById(id)
+            User user = userRepo.findUserById(id)
                     .orElse(new User(fname, lname, age, email, usrname, pass));
 
             if (user.getId() != null) {
@@ -68,12 +67,19 @@ public class UsersController {
                 user.setUsername(usrname);
                 user.setPassword(pass);
             }
+            userRepo.save(user);
+            return ResponseEntity.ok("User " + user.getFirstName() + " saved successfully");
 
-        }catch (Exception e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
+        }catch (DataIntegrityViolationException dive){
+            return ResponseEntity.ok("It is mandatory to fill all user fields correctly. Check your personal data.");
+        } catch (ParameterRecognitionException e) {
+            return ResponseEntity.ok(e.getMessage());  // проверка за невалидни данни - еmail, age
+        }catch (NoSuchAlgorithmException nsae) {
+            return ResponseEntity.ok(nsae.getMessage());  // за хеширането
+        }catch (NullPointerException npe){
+            return  ResponseEntity.ok(npe.getMessage());  // prowerka za towa dali e `eknato i dali e prazen string
         }
 
-        return new ResponseEntity<User>(userRepo.save(user), HttpStatus.OK);
     }
 
     @DeleteMapping("/delete")
@@ -87,13 +93,16 @@ public class UsersController {
     }
 
     @GetMapping("/filter")
-    public ResponseEntity<?> filterUsers(String fname, String lname, int currentPage, int perPage){
+    public ResponseEntity<?> filterUsers(@RequestParam(defaultValue = "") String fname,
+                                         @RequestParam(defaultValue = "") String lname,
+                                         @RequestParam(defaultValue = "1") int currentPage,
+                                         @RequestParam(defaultValue = "3") int perPage){
         Pageable pageable = PageRequest.of(currentPage - 1, perPage);
-        Page<User> users = userRepo.filterUsersByName(pageable, fname.toLowerCase(), lname.toLowerCase());
+        Page<User> userPages = userRepo.filterUsersByName(pageable, (fname.toLowerCase()).trim(), (lname.toLowerCase()).trim());
         Map<String, Object> response = new HashMap();
-        response.put("totalElements", users.getTotalElements());
-        response.put("totalPages", users.getTotalPages());
-        response.put("users", users.getContent());
+        response.put("totalElements", userPages.getTotalElements());
+        response.put("totalPages", userPages.getTotalPages());
+        response.put("users", userPages.getContent());
 
         return ResponseEntity.ok(response);
     }

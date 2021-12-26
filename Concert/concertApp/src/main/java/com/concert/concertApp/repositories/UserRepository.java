@@ -23,4 +23,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "AND lower(u.lastName) " +
             "LIKE :#{#lastName == null || #lastName.isEmpty()? '%' : #lastName+'%'}")
     Page<User> filterUsersByName(Pageable pageable, String firstName, String lastName);
+
+    @Query("SELECT usr FROM User usr WHERE usr.username = :usrname" )
+    User checkUniqueUsrname(String usrname);
+
+    @Query("SELECT user FROM User user WHERE user.email = :email" )
+    User checkUniqueEmail(String email);
 }
