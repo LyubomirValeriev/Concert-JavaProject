@@ -81,6 +81,10 @@ public class ConcertHall {
 
     public void setConHallName(String conHallName) {
 
+        if(conHallName== null
+                || conHallName.isEmpty())
+        throw new NullPointerException("Моля въведете адрес");
+
         if(isNameValid(conHallName) == false )
             throw  new ParameterRecognitionException("Въведете правилно име <3") ;
 

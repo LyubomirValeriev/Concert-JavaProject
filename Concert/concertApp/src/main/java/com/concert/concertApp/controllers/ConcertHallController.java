@@ -52,11 +52,6 @@ public class ConcertHallController {
     public  ResponseEntity<?> saveConHall(
             @RequestBody ConcertHallRequest conHallRequest){
 
-        if(conHallRequest.getAdress() == null
-                || conHallRequest.getAdress().isEmpty())
-            return ResponseEntity.ok( "Моля въведете адрес  ");
-
-
         ConcertHall concertHallInDb = concertHallRepo.findConcertHallByAdress(conHallRequest.getAdress());
 
         if(concertHallInDb != null)
@@ -90,6 +85,9 @@ public class ConcertHallController {
         }
         catch (ParameterRecognitionException e) {
             return  ResponseEntity.ok( e.getMessage()) ;
+        }
+        catch (NullPointerException e ){
+            return  ResponseEntity.ok(e.getMessage());
         }
         catch (Exception e ){
             return ResponseEntity.ok(e.getMessage());
