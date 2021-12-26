@@ -17,7 +17,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
-    private  Long Id;
+    private Long Id;
 
     @Column(nullable = false, length = 30)
     private String firstName;
@@ -31,33 +31,23 @@ public class User {
     @Column(nullable = false)
     private String email;
 
-<<<<<<< HEAD
     @Column(nullable = false)
     private String username;
-=======
-    @JsonIgnore
-    private String username;
-    @JsonIgnore
-    private String password;
->>>>>>> Luybo-Concert-to-Hall
+
 
     @Column(nullable = false)
     private String password;
 
-<<<<<<< HEAD
-    public User(String firstName, String lastName, String age, String email, String username, String password)
-=======
-@OneToMany(mappedBy = "user")
-private Set<Reservation> reservations;
+    //  public User(String firstName, String lastName, String age, String email, String username, String password)
 
-
+    @OneToMany(mappedBy = "user")
+    private Set<Reservation> reservations;
 
 
     public User(String firstName,
-                String lastName, Integer age,
+                String lastName, String age,
                 String email, String username,
                 String password)
->>>>>>> Luybo-Concert-to-Hall
             throws NoSuchAlgorithmException {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -94,16 +84,18 @@ private Set<Reservation> reservations;
         this.lastName = lastName.trim();
     }
 
-    public String getAge() { return age; }
+    public String getAge() {
+        return age;
+    }
 
     public void setAge(String age) {
         if (age == null || age.isEmpty())
-         throw new NullPointerException("Please enter your age");
+            throw new NullPointerException("Please enter your age");
 
-        if(!isNumeric(age) || Integer.parseInt(age) > 130) {
-         throw new ParameterRecognitionException("Please check your age input");
+        if (!isNumeric(age) || Integer.parseInt(age) > 130) {
+            throw new ParameterRecognitionException("Please check your age input");
         }
-            this.age = age;
+        this.age = age;
     }
 
     public String getEmail(String email) {
@@ -114,7 +106,7 @@ private Set<Reservation> reservations;
         if (email == null || email.isEmpty())
             throw new NullPointerException("Please enter your email");
 
-        if (!isValid(email)){
+        if (!isValid(email)) {
             throw new ParameterRecognitionException("Invalid email format!");
         }
 
@@ -141,8 +133,7 @@ private Set<Reservation> reservations;
         this.password = encrypt(password);
     }
 
-    public static boolean isValid(String checkEmail)
-    {
+    public static boolean isValid(String checkEmail) {
         String emailRegex = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
                 + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
 
@@ -162,23 +153,22 @@ private Set<Reservation> reservations;
         return bigInt.toString(16);
     }
 
-<<<<<<< HEAD
     public static boolean isNumeric(String age) {
         try {
             Integer.parseInt(age);
             return true;
-        } catch(NumberFormatException e){
+        } catch (NumberFormatException e) {
             return false;
         }
-=======
 
 
-    public Set<Reservation> getReservations() {
+    }
+    public Set<Reservation> getReservations () {
         return reservations;
     }
 
-    public void setReservations(Set<Reservation> reservations) {
+    public void setReservations (Set < Reservation > reservations) {
         this.reservations = reservations;
->>>>>>> Luybo-Concert-to-Hall
     }
 }
+

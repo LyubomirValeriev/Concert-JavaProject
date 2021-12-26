@@ -5,18 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8380620b-a010-4884-a547-009ec9b5611a" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/artifacts/concertApp_war.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/concertApp_war.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/artifacts/concertApp_war_exploded.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/concertApp_war_exploded.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-<<<<<<< HEAD
+      <change beforePath="$PROJECT_DIR$/Concert/concertApp/concertApp.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Concert/concertApp/concertApp.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Concert/concertApp/src/main/java/com/concert/concertApp/controllers/ConcertsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Concert/concertApp/src/main/java/com/concert/concertApp/controllers/ConcertsController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Concert/concertApp/src/main/java/com/concert/concertApp/entities/Concert.java" beforeDir="false" afterPath="$PROJECT_DIR$/Concert/concertApp/src/main/java/com/concert/concertApp/entities/Concert.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Concert/concertApp/src/main/java/com/concert/concertApp/entities/Performer.java" beforeDir="false" afterPath="$PROJECT_DIR$/Concert/concertApp/src/main/java/com/concert/concertApp/entities/Performer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Concert/concertApp/src/main/java/com/concert/concertApp/repositories/ConcertRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Concert/concertApp/src/main/java/com/concert/concertApp/repositories/ConcertRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Concert/concertApp/src/main/java/com/concert/concertApp/repositories/PerformerRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Concert/concertApp/src/main/java/com/concert/concertApp/repositories/PerformerRepository.java" afterDir="false" />
-=======
-      <change beforePath="$PROJECT_DIR$/Concert/concertApp/src/main/java/com/concert/concertApp/controllers/ConcertHallController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Concert/concertApp/src/main/java/com/concert/concertApp/controllers/ConcertHallController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Concert/concertApp/src/main/java/com/concert/concertApp/entities/City.java" beforeDir="false" afterPath="$PROJECT_DIR$/Concert/concertApp/src/main/java/com/concert/concertApp/entities/City.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Concert/concertApp/src/main/java/com/concert/concertApp/repositories/CityRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Concert/concertApp/src/main/java/com/concert/concertApp/repositories/CityRepository.java" afterDir="false" />
->>>>>>> Luybo-City
+      <change beforePath="$PROJECT_DIR$/Concert/concertApp/src/main/java/com/concert/concertApp/entities/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/Concert/concertApp/src/main/java/com/concert/concertApp/entities/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Concert/concertApp/target/classes/com/concert/concertApp/controllers/ConcertsController.class" beforeDir="false" afterPath="$PROJECT_DIR$/Concert/concertApp/target/classes/com/concert/concertApp/controllers/ConcertsController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Concert/concertApp/target/classes/com/concert/concertApp/entities/Concert.class" beforeDir="false" afterPath="$PROJECT_DIR$/Concert/concertApp/target/classes/com/concert/concertApp/entities/Concert.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Concert/concertApp/target/classes/com/concert/concertApp/entities/ConcertHall.class" beforeDir="false" afterPath="$PROJECT_DIR$/Concert/concertApp/target/classes/com/concert/concertApp/entities/ConcertHall.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Concert/concertApp/target/classes/com/concert/concertApp/entities/Performer.class" beforeDir="false" afterPath="$PROJECT_DIR$/Concert/concertApp/target/classes/com/concert/concertApp/entities/Performer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Concert/concertApp/target/classes/com/concert/concertApp/entities/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/Concert/concertApp/target/classes/com/concert/concertApp/entities/User.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,6 +48,9 @@
         <entry key="JPA Inspector" value="true" />
         <entry key="JPA Palette" value="true" />
         <entry key="JPA Structure" value="true" />
+        <entry key="com.haulmont.jpb.jpaInspector" value="true" />
+        <entry key="com.haulmont.jpb.jpaPalette" value="true" />
+        <entry key="com.haulmont.jpb.jpaStructure" value="true" />
       </map>
     </option>
     <option name="myId2Visible">
@@ -54,6 +58,9 @@
         <entry key="JPA Inspector" value="false" />
         <entry key="JPA Palette" value="false" />
         <entry key="JPA Structure" value="false" />
+        <entry key="com.haulmont.jpb.jpaInspector" value="false" />
+        <entry key="com.haulmont.jpb.jpaPalette" value="false" />
+        <entry key="com.haulmont.jpb.jpaStructure" value="true" />
       </map>
     </option>
   </component>
@@ -71,6 +78,10 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
   </component>
   <component name="RunManager">
     <configuration name="ConcertAppApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
@@ -93,9 +104,7 @@
       <workItem from="1637877560957" duration="217000" />
       <workItem from="1637878472090" duration="32000" />
       <workItem from="1637879526654" duration="67000" />
-<<<<<<< HEAD
       <workItem from="1637926189294" duration="2440000" />
-=======
       <workItem from="1637934666142" duration="1691000" />
       <workItem from="1637938693108" duration="212000" />
       <workItem from="1637939209310" duration="380000" />
@@ -104,7 +113,6 @@
       <workItem from="1638008268750" duration="1375000" />
       <workItem from="1638011781385" duration="260000" />
       <workItem from="1638014151032" duration="5664000" />
->>>>>>> Luybo-City
     </task>
     <servers />
   </component>
@@ -121,6 +129,5 @@
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
   </component>
 </project>

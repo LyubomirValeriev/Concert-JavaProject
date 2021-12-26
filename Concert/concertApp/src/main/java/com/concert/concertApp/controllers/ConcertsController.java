@@ -3,11 +3,11 @@ package com.concert.concertApp.controllers;
 import com.concert.concertApp.entities.Concert;
 import com.concert.concertApp.entities.ConcertHall;
 import com.concert.concertApp.entities.Performer;
-<<<<<<< HEAD
+
 import com.concert.concertApp.payload.request.ConcertRequest;
-=======
+
 import com.concert.concertApp.repositories.ConcertHallRepository;
->>>>>>> Luybo-Concert-to-Hall
+
 import com.concert.concertApp.repositories.ConcertRepository;
 import com.concert.concertApp.repositories.PerformerRepository;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -16,15 +16,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-<<<<<<< HEAD
+
 import java.util.*;
-=======
 
 import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
->>>>>>> Luybo-Concert-to-Hall
+
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/concert")
@@ -46,18 +45,13 @@ public class ConcertsController {
 
     }
 
-<<<<<<< HEAD
     @GetMapping("/fetch/concerts")
     public List<Concert> getAllConcerts() {
         return concertRepo.findAll();
     }
 
-=======
-    @GetMapping("/fetch")
-    public List<Concert> getAllConcerts(){
-        return concertRepo.findAll() ;
-    }
->>>>>>> Luybo-Concert-to-Hall
+
+
     @PostMapping("/save/performer")
     public ResponseEntity<?> persistPerformer(String name){
         Performer performer = performerRepo.findPerformerByName(name.trim());
@@ -100,7 +94,8 @@ public class ConcertsController {
                     concertRequest.getDate(),
                     performerSet);
             concertRepo.save(concert);
-            return ResponseEntity.ok("Concert " +concert.getTitle()  + " saved successfully");
+
+            return ResponseEntity.ok("Concert " + concert.getTitle()  + " saved successfully");
         }catch (DataIntegrityViolationException e) {
           return ResponseEntity.ok("It is mandatory to enter a date and price when creating a new concert record.");
         }
@@ -120,12 +115,7 @@ public class ConcertsController {
         response.put("totalPages", concertPages.getTotalPages());
         response.put("results", concertPages.getContent());
 
-<<<<<<< HEAD
-        return  ResponseEntity.ok(response);
-=======
-        return ResponseEntity.ok("Concert " + concertRepo.save(concert).getTitle() + " saved successfully");
-
->>>>>>> Luybo-Concert-to-Hall
+    return  ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/delete/performer")

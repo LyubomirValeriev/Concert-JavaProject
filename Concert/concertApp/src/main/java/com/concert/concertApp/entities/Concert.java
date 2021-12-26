@@ -1,29 +1,17 @@
 package com.concert.concertApp.entities;
 
-<<<<<<< HEAD
 import org.hibernate.PropertyValueException;
 import org.springframework.http.ResponseEntity;
-=======
 import com.fasterxml.jackson.annotation.JsonIgnore;
->>>>>>> Luybo-Concert-to-Hall
 
 import javax.persistence.*;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-<<<<<<< HEAD
 import java.util.Set;
-
-@Entity
-@Table(name = "concerts")
-public class Concert {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-
-    private  Long id;
-=======
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+
 
 @Entity
 @Table(name = "concert")
@@ -32,7 +20,6 @@ public class Concert {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
     private  Long concertId;
->>>>>>> Luybo-Concert-to-Hall
 
     @Column(nullable = false)
     private  String title;
@@ -61,7 +48,6 @@ public class Concert {
 
 
     public Concert() {
-<<<<<<< HEAD
     }
 
     public Concert(String title, String description, Double price, Timestamp date, Set<Performer> performers) {
@@ -70,7 +56,6 @@ public class Concert {
             this.price = price;
             this.date = date;
             this.performers = performers;
-=======
 
     }
 
@@ -84,7 +69,6 @@ public class Concert {
 
     public Long getId() {
         return concertId;
->>>>>>> Luybo-Concert-to-Hall
     }
 
     public String getTitle() {
