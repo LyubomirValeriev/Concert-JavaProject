@@ -1,6 +1,5 @@
 package com.concert.concertApp.entities;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.engine.query.ParameterRecognitionException;
 
@@ -17,14 +16,17 @@ public class City {
     @JsonIgnore
     private  Long id ;
 
-    @Column(name = "city_name")
+    @Column(name = "city_name", length =  20)
     private  String name ;
 
+@OneToMany(mappedBy =  "city")
+private Set<ConcertHall> hall ;
 
     public City() {
     }
 
     public City(String name) {
+
         this.name = name;
     }
 

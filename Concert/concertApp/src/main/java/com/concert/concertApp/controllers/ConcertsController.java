@@ -1,8 +1,13 @@
 package com.concert.concertApp.controllers;
 
 import com.concert.concertApp.entities.Concert;
+import com.concert.concertApp.entities.ConcertHall;
 import com.concert.concertApp.entities.Performer;
+<<<<<<< HEAD
 import com.concert.concertApp.payload.request.ConcertRequest;
+=======
+import com.concert.concertApp.repositories.ConcertHallRepository;
+>>>>>>> Luybo-Concert-to-Hall
 import com.concert.concertApp.repositories.ConcertRepository;
 import com.concert.concertApp.repositories.PerformerRepository;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -11,27 +16,48 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+<<<<<<< HEAD
 import java.util.*;
+=======
+
+import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+>>>>>>> Luybo-Concert-to-Hall
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/concert")
 @RestController
 
 public class ConcertsController {
+
     private final ConcertRepository concertRepo;
     private final PerformerRepository performerRepo;
+ private final ConcertHallRepository concertHallRepo ;
 
     ConcertsController(ConcertRepository concertRepo,
-                       PerformerRepository performerRepo){
+                       PerformerRepository performerRepo,
+                       ConcertHallRepository concertHallRepo){
+
         this.concertRepo = concertRepo;
         this.performerRepo = performerRepo;
+        this.concertHallRepo = concertHallRepo ;
+
     }
 
+<<<<<<< HEAD
     @GetMapping("/fetch/concerts")
     public List<Concert> getAllConcerts() {
         return concertRepo.findAll();
     }
 
+=======
+    @GetMapping("/fetch")
+    public List<Concert> getAllConcerts(){
+        return concertRepo.findAll() ;
+    }
+>>>>>>> Luybo-Concert-to-Hall
     @PostMapping("/save/performer")
     public ResponseEntity<?> persistPerformer(String name){
         Performer performer = performerRepo.findPerformerByName(name.trim());
@@ -94,7 +120,12 @@ public class ConcertsController {
         response.put("totalPages", concertPages.getTotalPages());
         response.put("results", concertPages.getContent());
 
+<<<<<<< HEAD
         return  ResponseEntity.ok(response);
+=======
+        return ResponseEntity.ok("Concert " + concertRepo.save(concert).getTitle() + " saved successfully");
+
+>>>>>>> Luybo-Concert-to-Hall
     }
 
     @DeleteMapping("/delete/performer")

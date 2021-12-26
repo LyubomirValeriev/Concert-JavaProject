@@ -1,10 +1,12 @@
 package com.concert.concertApp.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.engine.query.ParameterRecognitionException;
 import javax.persistence.*;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 
@@ -14,6 +16,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     private  Long Id;
 
     @Column(nullable = false, length = 30)
@@ -28,13 +31,33 @@ public class User {
     @Column(nullable = false)
     private String email;
 
+<<<<<<< HEAD
     @Column(nullable = false)
     private String username;
+=======
+    @JsonIgnore
+    private String username;
+    @JsonIgnore
+    private String password;
+>>>>>>> Luybo-Concert-to-Hall
 
     @Column(nullable = false)
     private String password;
 
+<<<<<<< HEAD
     public User(String firstName, String lastName, String age, String email, String username, String password)
+=======
+@OneToMany(mappedBy = "user")
+private Set<Reservation> reservations;
+
+
+
+
+    public User(String firstName,
+                String lastName, Integer age,
+                String email, String username,
+                String password)
+>>>>>>> Luybo-Concert-to-Hall
             throws NoSuchAlgorithmException {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -139,6 +162,7 @@ public class User {
         return bigInt.toString(16);
     }
 
+<<<<<<< HEAD
     public static boolean isNumeric(String age) {
         try {
             Integer.parseInt(age);
@@ -146,5 +170,15 @@ public class User {
         } catch(NumberFormatException e){
             return false;
         }
+=======
+
+
+    public Set<Reservation> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(Set<Reservation> reservations) {
+        this.reservations = reservations;
+>>>>>>> Luybo-Concert-to-Hall
     }
 }
