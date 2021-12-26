@@ -42,7 +42,7 @@ public class ConcertHallController {
 
     @GetMapping("/find/adress")
     public ResponseEntity<?> findHall(String adress) {
-        Optional<ConcertHall> result = concertHallRepo.findConcertHallByConHallAdress(adress);
+        Optional<ConcertHall> result = concertHallRepo.findConcertHallByConHallAdress(adress.trim());
 
         return result.isPresent()
                 ?ResponseEntity.ok(result.get())
@@ -52,18 +52,13 @@ public class ConcertHallController {
     public  ResponseEntity<?> saveConHall(
             @RequestBody ConcertHallRequest conHallRequest){
 
-
-
         if(conHallRequest.getAdress() == null
                 || conHallRequest.getAdress().isEmpty())
             return ResponseEntity.ok( "Моля въведете адрес  ");
 
 
         ConcertHall concertHallInDb = concertHallRepo.findConcertHallByAdress(conHallRequest.getAdress());
-//                .orElse(new ConcertHall(conHallRequest.getConHallName() ,
-//                        conHallRequest.getAdress(),
-//                        conHallRequest.getCapacity(),
-//                        cityInDB));
+
         if(concertHallInDb != null)
             return  ResponseEntity.ok("Концертна зала на този адрес вече е запаметена");
 
@@ -87,7 +82,7 @@ public class ConcertHallController {
                cityInDB
          );
          concertHallRepo.save( concertHall);
-         return  ResponseEntity.ok("Концертната зала :" + concertHall.getConHallName() + " бе успешно запазена" );
+         return  ResponseEntity.ok("Концертната зала : " + concertHall.getConHallName() + " бе успешно запазена" );
 
         }
         catch (DataIntegrityViolationException e) {
@@ -101,43 +96,7 @@ public class ConcertHallController {
 
         }
     }
-//    @PostMapping("/save")
-//    public ResponseEntity<?> saveHall(String name ,
-//                                      String city,
-//                                      Long capacity,
-//                                      String adress,
-//                                      @RequestParam(required = false) Long id ){
-//
-//        ConcertHall hall = null ;
-//        City city1 = null ;
-//
-//        try {
-//
-//            city1 = cityRepo.findByName(city).
-//                    orElse(new City(city));
-//
-//            if(city1.getId() == null ){
-//                cityRepo.save(city1);
-//            }
-//            hall = concertHallRepo.findConcertHallByConHallId(id)
-//                    .orElse(new ConcertHall(name, adress,  capacity , city1));
-//
-//            if (hall.getConHallId() != null) {
-//                hall.setConHallName(name);
-//                hall.setConHallAdress(adress);
-//                // hall.setConHallCity(city);
-//                hall.setConHallCapacity(capacity);
-//
-//           }
-//
-//        }catch (Exception e ){
-//            return  new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
-//        }
-//       concertHallRepo.save(hall);
-//        return  ResponseEntity.ok("HAll was save");
-//      // return  ResponseEntity<ConcertHall>(concertHallRepo.save(hall), HttpStatus.OK);
-//
-//    }
+
     @DeleteMapping("/deleteHall")
     public ResponseEntity<?> deleteHall (
             String name ,

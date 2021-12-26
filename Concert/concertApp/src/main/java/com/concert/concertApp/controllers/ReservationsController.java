@@ -91,24 +91,24 @@ public class ReservationsController {
 
 
  }
- @GetMapping("/pages")
-    public ResponseEntity<?> filterReservations( @RequestParam(defaultValue = "0") Double reservationFinalPrice ,
-                                                 @RequestParam(defaultValue = "1") int currentPage,
-                                                 @RequestParam(defaultValue = "5") int perPage){
-
-        Pageable pageable = PageRequest.of(currentPage - 1, perPage);
-        Page<Reservation> results = reservationRepo.filterReservations(
-                pageable,
-                reservationFinalPrice
-        );
-
-
-
-        Map<String, Object> response = new HashMap();
-        response.put("totalElements", results.getTotalElements());
-        response.put("totalPages", results.getTotalPages());
-        response.put("halls", results.getContent());
-
-        return  ResponseEntity.ok(response);
-    }
+// @GetMapping("/pages")
+//    public ResponseEntity<?> filterReservations( @RequestParam(defaultValue = "0") Double reservationFinalPrice ,
+//                                                 @RequestParam(defaultValue = "1") int currentPage,
+//                                                 @RequestParam(defaultValue = "5") int perPage){
+//
+//        Pageable pageable = PageRequest.of(currentPage - 1, perPage);
+//        Page<Reservation> results = reservationRepo.filterReservations(
+//                pageable,
+//                reservationFinalPrice
+//        );
+//
+//
+//
+//        Map<String, Object> response = new HashMap();
+//        response.put("totalElements", results.getTotalElements());
+//        response.put("totalPages", results.getTotalPages());
+//        response.put("halls", results.getContent());
+//
+//        return  ResponseEntity.ok(response);
+//    }
 }

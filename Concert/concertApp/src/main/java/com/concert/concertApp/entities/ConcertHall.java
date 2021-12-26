@@ -49,7 +49,7 @@ public class ConcertHall {
         this.setConHallName(conHallName);
            // this.conHallName = conHallName;
 
-            this.conHallAdress = conHallAdress;
+            this.conHallAdress = conHallAdress.trim();
             this.city = city;
             this.setConHallCapacity(conHallCapacity);
             //this.conHallCapacity = conHallCapacity;
