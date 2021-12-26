@@ -37,7 +37,7 @@ public class Reservation {
     @JoinColumn(name = "concertId")
     private Concert concert ;
 
-    // username * по това да търсим кой ги е запазил а не по id
+
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "users_Id")
@@ -62,6 +62,10 @@ public class Reservation {
 
     }
 
+    public Reservation(Double reservationFinalPrice   ) {
+        this.reservationFinalPrice = reservationFinalPrice;
+
+    }
 
     public Double getReservationFinalPrice() {
         return reservationFinalPrice;

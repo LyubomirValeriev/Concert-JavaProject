@@ -151,10 +151,16 @@ public class ConcertHallController {
                 return ResponseEntity.ok("Hall not found");
 
             }
-            concertHallRepo.delete(hall.get());
-            return ResponseEntity.ok("Concert hall with name : " + name + " in City " + city +
-                    " was deleted");
-            //return("Hall with name : " + name + "in " + city + " was deleted!");
+            try {
+                concertHallRepo.delete(hall.get());
+                return ResponseEntity.ok("Concert hall with name : " + name + " in City " + city +
+                        " was deleted");
+                //return("Hall with name : " + name + "in " + city + " was deleted!");
+            }
+            catch ( DataIntegrityViolationException e ){
+                return  ResponseEntity.ok ("Не можете да изтриете залата, защото тя е част от концерт");
+            }
+
 
         }else
             return ResponseEntity.ok("City not found");

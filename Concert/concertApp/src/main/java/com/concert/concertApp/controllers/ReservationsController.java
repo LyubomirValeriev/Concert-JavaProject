@@ -1,19 +1,21 @@
 package com.concert.concertApp.controllers;
 
 import com.concert.concertApp.entities.Concert;
+import com.concert.concertApp.entities.ConcertHall;
 import com.concert.concertApp.entities.Reservation;
 import com.concert.concertApp.entities.User;
 import com.concert.concertApp.repositories.ConcertHallRepository;
 import com.concert.concertApp.repositories.ConcertRepository;
 import com.concert.concertApp.repositories.ReservationRepository;
 import com.concert.concertApp.repositories.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -89,4 +91,24 @@ public class ReservationsController {
 
 
  }
+ @GetMapping("/pages")
+    public ResponseEntity<?> filterReservations( @RequestParam(defaultValue = "0") Double reservationFinalPrice ,
+                                                 @RequestParam(defaultValue = "1") int currentPage,
+                                                 @RequestParam(defaultValue = "5") int perPage){
+
+        Pageable pageable = PageRequest.of(currentPage - 1, perPage);
+        Page<Reservation> results = reservationRepo.filterReservations(
+                pageable,
+                reservationFinalPrice
+        );
+
+
+
+        Map<String, Object> response = new HashMap();
+        response.put("totalElements", results.getTotalElements());
+        response.put("totalPages", results.getTotalPages());
+        response.put("halls", results.getContent());
+
+        return  ResponseEntity.ok(response);
+    }
 }
