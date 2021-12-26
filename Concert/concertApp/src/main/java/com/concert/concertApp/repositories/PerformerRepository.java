@@ -12,4 +12,6 @@ public interface PerformerRepository extends JpaRepository<Performer, Long> {
     @Query("SELECT p FROM Performer p " +
            "WHERE lower(p.name) LIKE :#{#name + '%'} ")
     Optional<Performer> fetchPerformerLikeName(String name);
+
+
 }

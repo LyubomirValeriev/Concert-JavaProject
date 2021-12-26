@@ -18,18 +18,17 @@ public class Performer {
     }
 
     public Performer(String name) {
-        this.name = name;
+        this.setName(name);
     }
 
     public Long getId() {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public String getName() {return name;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = name.trim();
     }
 }

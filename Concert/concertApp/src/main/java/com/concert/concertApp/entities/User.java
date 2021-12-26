@@ -1,8 +1,6 @@
 package com.concert.concertApp.entities;
 
 import org.hibernate.engine.query.ParameterRecognitionException;
-import org.springframework.http.ResponseEntity;
-
 import javax.persistence.*;
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -18,27 +16,32 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private  Long Id;
 
+    @Column(nullable = false, length = 30)
     private String firstName;
+
+    @Column(nullable = false, length = 30)
     private String lastName;
-    private Integer age;
+
+    @Column(nullable = false, length = 3)
+    private String age;
+
+    @Column(nullable = false)
     private String email;
+
+    @Column(nullable = false)
     private String username;
+
+    @Column(nullable = false)
     private String password;
 
-
-    public User(String firstName, String lastName, Integer age, String email, String username, String password)
+    public User(String firstName, String lastName, String age, String email, String username, String password)
             throws NoSuchAlgorithmException {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.age = age;
-
-        if(isValid(email))
-            this.email = email;
-        else
-            throw new ParameterRecognitionException("Invalid email format!");
-
+        this.setAge(age);
+        this.setEmail(email);
         this.username = username;
-        this.password = encrypt(password);
+        this.setPassword(password);
     }
 
     public User() {
@@ -53,7 +56,9 @@ public class User {
     }
 
     public void setFirstName(String firstName) {
-        this.firstName = firstName;
+        if (firstName == null || firstName.isEmpty())
+            throw new NullPointerException("Please enter your first name");
+        this.firstName = firstName.trim();
     }
 
     public String getLastName() {
@@ -61,21 +66,32 @@ public class User {
     }
 
     public void setLastName(String lastName) {
-        this.lastName = lastName;
+        if (lastName == null || lastName.isEmpty())
+            throw new NullPointerException("Please enter your last name");
+        this.lastName = lastName.trim();
     }
 
-    public Integer getAge() {
-        return age;
+    public String getAge() { return age; }
+
+    public void setAge(String age) {
+        if (age == null || age.isEmpty())
+         throw new NullPointerException("Please enter your age");
+
+        if(!isNumeric(age) || Integer.parseInt(age) > 130) {
+         throw new ParameterRecognitionException("Please check your age input");
+        }
+            this.age = age;
     }
 
-    public void setAge(Integer age) {
-        this.age = age;
+    public String getEmail(String email) {
+        return email;
     }
-
-    public String getEmail(String email) {return email;}
 
     public void setEmail(String email) {
-        if (isValid(email) == false){
+        if (email == null || email.isEmpty())
+            throw new NullPointerException("Please enter your email");
+
+        if (!isValid(email)){
             throw new ParameterRecognitionException("Invalid email format!");
         }
 
@@ -96,6 +112,9 @@ public class User {
 
     public void setPassword(String password)
             throws NoSuchAlgorithmException {
+        if (password == null || password.isEmpty())
+            throw new NullPointerException("Please enter your password");
+
         this.password = encrypt(password);
     }
 
@@ -110,7 +129,7 @@ public class User {
         return pat.matcher(checkEmail).matches();
     }
 
-    public String encrypt(String pass) throws NoSuchAlgorithmException {
+    public static String encrypt(String pass) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("MD5");
 
         byte[] messageDigest = md.digest(pass.getBytes());
@@ -120,4 +139,12 @@ public class User {
         return bigInt.toString(16);
     }
 
+    public static boolean isNumeric(String age) {
+        try {
+            Integer.parseInt(age);
+            return true;
+        } catch(NumberFormatException e){
+            return false;
+        }
+    }
 }

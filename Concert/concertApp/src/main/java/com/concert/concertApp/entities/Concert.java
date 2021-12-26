@@ -1,8 +1,11 @@
 package com.concert.concertApp.entities;
 
+import org.hibernate.PropertyValueException;
+import org.springframework.http.ResponseEntity;
+
 import javax.persistence.*;
+import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.Date;
 import java.util.Set;
 
 @Entity
@@ -10,16 +13,23 @@ import java.util.Set;
 public class Concert {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private  Long id;
 
+    @Column(nullable = false)
     private  String title;
+
     private  String description;
+
+    @Column(nullable = false)
     private Double price;
+
+    @Column(nullable = false)
     private Timestamp date;
 
     @ManyToMany
     @JoinTable(
-            name = "concetr_performers",
+            name = "concert_performers",
             joinColumns = @JoinColumn(name = "concert_id"),
             inverseJoinColumns = @JoinColumn(name = "performer_id")
     )
@@ -29,11 +39,11 @@ public class Concert {
     }
 
     public Concert(String title, String description, Double price, Timestamp date, Set<Performer> performers) {
-        this.title = title;
-        this.description = description;
-        this.price = price;
-        this.date = date;
-        this.performers = performers;
+            this.setTitle(title);
+            this.description = description;
+            this.price = price;
+            this.date = date;
+            this.performers = performers;
     }
 
     public String getTitle() {
@@ -41,7 +51,7 @@ public class Concert {
     }
 
     public void setTitle(String title) {
-        this.title = title;
+        this.title = title.trim();
     }
 
     public String getDescription() {
