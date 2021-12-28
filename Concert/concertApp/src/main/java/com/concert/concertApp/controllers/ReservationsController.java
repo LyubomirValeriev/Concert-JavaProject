@@ -8,6 +8,7 @@ import com.concert.concertApp.repositories.ConcertHallRepository;
 import com.concert.concertApp.repositories.ConcertRepository;
 import com.concert.concertApp.repositories.ReservationRepository;
 import com.concert.concertApp.repositories.UserRepository;
+import org.hibernate.procedure.ParameterMisuseException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -49,7 +50,8 @@ public class ReservationsController {
 
  @PostMapping("/save")
     public ResponseEntity<?> saveReservation (Long userId,
-                                              Long concertId) {
+                                              Long concertId,
+                                              String numberTickets) {
 
      Concert concert = null;
      User user = null;
@@ -63,7 +65,7 @@ public class ReservationsController {
          if (concert.getId() != null
                  && user.getId() != null) {
              double a = 0.1 ;
-             reservation = new Reservation(
+             reservation = new Reservation(numberTickets ,
                      new Date(System.currentTimeMillis()),
                      true,
                      true,
@@ -84,8 +86,11 @@ public class ReservationsController {
      catch (IllegalArgumentException t) {
          return  new ResponseEntity<>("Няма такъв концерт/протребител с такова id", HttpStatus.OK);
 
+     }catch (ParameterMisuseException p){
+         return  new ResponseEntity<>(p.getMessage(), HttpStatus.OK);
 
-     }catch (Exception e) {
+     }
+     catch (Exception e) {
          return  new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
      }
 
