@@ -9,6 +9,7 @@ import com.concert.concertApp.repositories.ConcertRepository;
 import com.concert.concertApp.repositories.ReservationRepository;
 import com.concert.concertApp.repositories.UserRepository;
 import org.hibernate.procedure.ParameterMisuseException;
+import org.hibernate.procedure.ParameterStrategyException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -39,13 +40,16 @@ public class ReservationsController {
  }
 
  @DeleteMapping("/delete")
-    public ResponseEntity<?> deleteReservation(Long id){
-     Optional<Reservation> reservation = reservationRepo.findById(id);
+    public ResponseEntity<?> deleteReservation(Long ReservationId){
+    
+     Optional<Reservation> reservation = reservationRepo.findById(ReservationId);
      if(reservation.isEmpty()){
-         return ResponseEntity.ok("Няма такава резервация ;(");
+         return ResponseEntity.ok("Няма такава резервация ;");
      }
+     Reservation reservation1  = reservationRepo.findReservationById(ReservationId);
+     reservation1.freeUpSpace(Integer.parseInt(reservation1.getReservationTickets()));
      reservationRepo.delete(reservation.get());
-     return  ResponseEntity.ok("Резервацията с id:" + id + " е изтрита ");
+     return  ResponseEntity.ok("Резервацията с id:" + ReservationId + " е изтрита ");
  }
 
  @PostMapping("/save")
@@ -79,6 +83,9 @@ public class ReservationsController {
              reservation.setReservationPaid(true);
 
          }
+
+         reservation.checkedCapacity(Integer.parseInt(numberTickets));
+
          reservationRepo.save(reservation);
          return  ResponseEntity.ok("Резервацията беше успешно запазена") ;
 
@@ -89,6 +96,8 @@ public class ReservationsController {
      }catch (ParameterMisuseException p){
          return  new ResponseEntity<>(p.getMessage(), HttpStatus.OK);
 
+     }catch (ParameterStrategyException s){
+         return  new ResponseEntity<>(s.getMessage(), HttpStatus.OK);
      }
      catch (Exception e) {
          return  new ResponseEntity<>(e.getMessage(), HttpStatus.OK);

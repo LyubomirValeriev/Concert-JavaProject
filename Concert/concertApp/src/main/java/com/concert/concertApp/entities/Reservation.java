@@ -2,6 +2,7 @@ package com.concert.concertApp.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.procedure.ParameterMisuseException;
+import org.hibernate.procedure.ParameterStrategyException;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -62,7 +63,7 @@ public class Reservation {
                        Concert concert,
                        User user
                        ) {
-        this.reservationTickets = reservationTickets ;
+        this.setReservationTickets(reservationTickets);
         this.reservationDate = reservationDate;
         this.reservationPaid = reservationPaid;
         this.reservationDiscount = reservationDiscount;
@@ -156,5 +157,29 @@ public class Reservation {
             throw  new ParameterMisuseException("The number must be an integer!");
         }
         this.reservationTickets = reservationTickets;
+    }
+
+    public  void checkedCapacity(Integer reservedTickets){
+        if(
+                concert.getReservedTickets() + reservedTickets >
+                        Integer.parseInt(concert.getHall().getConHallCapacity())){
+
+            throw  new ParameterStrategyException("Няма място вече във залата, моля опитайте по-късно :_( ") ;
+
+        }else if(
+                concert.getReservedTickets() + reservedTickets <=
+                        Integer.parseInt(concert.getHall().getConHallCapacity()))
+        {
+            reservedTickets = reservedTickets + concert.getReservedTickets() ;
+         concert.setReservedTickets(reservedTickets);
+        }
+    }
+
+    public void freeUpSpace(Integer reservedTickets){
+
+        Integer fus =   concert.getReservedTickets() - reservedTickets ;
+        concert.setReservedTickets(
+                fus
+        );
     }
 }

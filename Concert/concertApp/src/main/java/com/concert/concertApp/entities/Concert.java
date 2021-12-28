@@ -32,7 +32,8 @@ public class Concert {
     @Column(nullable = false)
     private Timestamp date;
 
-
+    //@Column(nullable = false ,)
+ private  Integer reservedTickets = 0  ;
 
     @ManyToOne
     @JoinColumn(name  = "conHallId")
@@ -117,5 +118,13 @@ public class Concert {
 
     public void setHall(ConcertHall hall) {
         this.hall = hall;
+    }
+
+    public Integer getReservedTickets() {
+        return reservedTickets;
+    }
+
+    public void setReservedTickets(Integer reservedTickets) {
+        this.reservedTickets = reservedTickets;
     }
 }
