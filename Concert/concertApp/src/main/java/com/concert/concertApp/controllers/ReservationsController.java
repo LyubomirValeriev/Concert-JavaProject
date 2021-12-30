@@ -28,7 +28,8 @@ public class ReservationsController {
     private final ConcertRepository concertsRepo ;
     private final UserRepository userRepo ;
 
- ReservationsController(ReservationRepository reservationRepo , ConcertRepository concertRepo, UserRepository userRepo){
+ ReservationsController(ReservationRepository reservationRepo,
+                        ConcertRepository concertRepo, UserRepository userRepo){
      this.reservationRepo = reservationRepo ;
      this.concertsRepo = concertRepo  ;
      this.userRepo = userRepo ;
@@ -71,7 +72,7 @@ public class ReservationsController {
              double a = 0.1 ;
              reservation = new Reservation(numberTickets ,
                      new Date(System.currentTimeMillis()),
-                     true,
+                     true, // !
                      true,
                      (double) 0,
                      concert,
