@@ -160,8 +160,6 @@ public class User {
         } catch (NumberFormatException e) {
             return false;
         }
-
-
     }
     public Set<Reservation> getReservations () {
         return reservations;

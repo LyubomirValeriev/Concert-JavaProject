@@ -10,6 +10,7 @@ import com.concert.concertApp.repositories.ConcertHallRepository;
 
 import com.concert.concertApp.repositories.ConcertRepository;
 import com.concert.concertApp.repositories.PerformerRepository;
+import org.hibernate.engine.query.ParameterRecognitionException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -96,9 +97,12 @@ public class ConcertsController {
             concertRepo.save(concert);
 
             return ResponseEntity.ok("Concert " + concert.getTitle()  + " saved successfully");
-        }catch (DataIntegrityViolationException e) {
-          return ResponseEntity.ok("It is mandatory to enter a date and price when creating a new concert record.");
+        }catch (NullPointerException e) {
+        return ResponseEntity.ok(e.getMessage());
+        } catch (ParameterRecognitionException pre) {
+            return ResponseEntity.ok(pre.getMessage());  // проверка за невалидни данни - price
         }
+
     }
 
     @GetMapping("/filter/pages")

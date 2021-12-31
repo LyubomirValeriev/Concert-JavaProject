@@ -1,6 +1,7 @@
 package com.concert.concertApp.entities;
 
 import org.hibernate.PropertyValueException;
+import org.hibernate.engine.query.ParameterRecognitionException;
 import org.springframework.http.ResponseEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -27,7 +28,7 @@ public class Concert {
     private  String description;
 
     @Column(nullable = false)
-    private Double price;
+    private String price;
 
     @Column(nullable = false)
     private Timestamp date;
@@ -50,21 +51,21 @@ public class Concert {
     public Concert() {
     }
 
-    public Concert(String title, String description, Double price, Timestamp date, Set<Performer> performers) {
+    public Concert(String title, String description, String price, Timestamp date, Set<Performer> performers) {
             this.setTitle(title);
             this.description = description;
-            this.price = price;
-            this.date = date;
+            this.setPrice(price);
+            this.setDate(date);
             this.performers = performers;
 
     }
 
 
-    public Concert(String title, String description, Double price, Timestamp date) {
+    public Concert(String title, String description, String price, Timestamp date) {
         this.title = title;
         this.description = description;
-        this.price = price;
-        this.date = date;
+        this.setPrice(price);
+        this.setDate(date);
     }
 
     public Long getId() {
@@ -87,11 +88,17 @@ public class Concert {
         this.description = description;
     }
 
-    public Double getPrice() {
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(String price) {
+        if (price == null || price.isEmpty())
+            throw new NullPointerException("Please enter the price of a concert");
+
+        if (!isNumeric(price)) {
+            throw new ParameterRecognitionException("Please check your price input");
+        }
         this.price = price;
     }
 
@@ -100,6 +107,8 @@ public class Concert {
     }
 
     public void setDate(Timestamp date) {
+        if (date == null)
+            throw new NullPointerException("Please enter a date for the concert");
         this.date = date;
     }
 
@@ -118,4 +127,15 @@ public class Concert {
     public void setHall(ConcertHall hall) {
         this.hall = hall;
     }
+
+    public static boolean isNumeric(String price) {
+        try {
+            Double.parseDouble(price);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
 }
+
+

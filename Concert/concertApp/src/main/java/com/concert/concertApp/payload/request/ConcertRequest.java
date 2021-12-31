@@ -7,7 +7,7 @@ public class ConcertRequest {
 
     private  String title;
     private  String description;
-    private Double price;
+    private String price;
     private Timestamp date;
     List<String> performers;
 
@@ -27,11 +27,11 @@ public class ConcertRequest {
         this.description = description;
     }
 
-    public Double getPrice() {
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 
