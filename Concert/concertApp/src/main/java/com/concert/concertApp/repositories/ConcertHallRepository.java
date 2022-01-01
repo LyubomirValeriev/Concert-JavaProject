@@ -12,7 +12,7 @@ import java.util.Optional;
 
 public interface ConcertHallRepository extends JpaRepository<ConcertHall , Long>
 {
-    Optional<ConcertHall> findConcertHallByConHallId(Long id);
+   // Optional<ConcertHall> findConcertHallByConHallId(Long id);
 
     Optional<ConcertHall> findConcertHallByConHallName( String name );
 

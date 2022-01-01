@@ -30,7 +30,8 @@ public class ConcertHallController {
     private final ConcertHallRepository concertHallRepo;
     private final CityRepository cityRepo ;
     
-    ConcertHallController(ConcertHallRepository concertHallRepo, CityRepository cityRepo) {
+    ConcertHallController(ConcertHallRepository concertHallRepo,
+                          CityRepository cityRepo) {
         this.concertHallRepo = concertHallRepo;
         this.cityRepo = cityRepo;
     }
@@ -116,10 +117,12 @@ public class ConcertHallController {
             }
             catch ( DataIntegrityViolationException e ){
                 return  ResponseEntity.ok ("Не можете да изтриете залата, защото тя е част от концерт");
-            }
+            } catch (Exception e){
+        return  ResponseEntity.ok("Нещо се обърка, опитай пак <3");}
 
 
-        }else
+
+    }else
             return ResponseEntity.ok("City not found");
     }
 

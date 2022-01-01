@@ -51,6 +51,9 @@ public class Reservation {
     private User  user ;
 
 
+    @ManyToOne
+    @JoinColumn(name = "discounts_Id")
+    private  Discount discount ;
 
     public Reservation() {
     }
@@ -73,6 +76,14 @@ public class Reservation {
 
     }
 
+    public Discount getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Discount discount) {
+        this.discount = discount;
+    }
+
     public Reservation(Double reservationFinalPrice   ) {
         this.reservationFinalPrice = reservationFinalPrice;
 
@@ -84,6 +95,8 @@ public class Reservation {
 
     public void setReservationFinalPrice(Double reservationFinalPrice) {
         this.reservationFinalPrice = reservationFinalPrice;
+
+
     }
 
     public Long getReservationId() {
