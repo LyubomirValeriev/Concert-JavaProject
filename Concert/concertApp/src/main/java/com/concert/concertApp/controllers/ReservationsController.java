@@ -1,5 +1,6 @@
 package com.concert.concertApp.controllers;
 
+import com.concert.concertApp.Additional.MailSender;
 import com.concert.concertApp.entities.Concert;
 import com.concert.concertApp.entities.ConcertHall;
 import com.concert.concertApp.entities.Reservation;
@@ -77,15 +78,16 @@ public class ReservationsController {
              reservation.setReservationPaid(true);
 
          }
+         MailSender.sendEmail();
          reservationRepo.save(reservation);
-         return  ResponseEntity.ok("Резервацията беше успешно запазена") ;
 
+         return  ResponseEntity.ok("Резервацията беше успешно запазена") ;
      }
      catch (IllegalArgumentException t) {
          return  new ResponseEntity<>("Няма такъв концерт/протребител с такова id", HttpStatus.OK);
-
-
-     }catch (Exception e) {
+     }catch (RuntimeException re){
+        return ResponseEntity.ok(re.getMessage());
+    }catch (Exception e) {
          return  new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
      }
 
