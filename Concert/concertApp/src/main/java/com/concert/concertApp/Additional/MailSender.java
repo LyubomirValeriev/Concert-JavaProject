@@ -1,5 +1,6 @@
 package com.concert.concertApp.Additional;
 
+import com.concert.concertApp.entities.Reservation;
 import org.springframework.http.ResponseEntity;
 
 import javax.mail.Message;
@@ -11,15 +12,16 @@ import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
 public class MailSender {
-    public static void sendEmail() {
+    public static void sendEmail(Reservation reservation) {
         // Add recipient
-        String to = "danielankov66@gmail.com";
-
+        String to = "ageorgieva239@gmail.com";
+            // nelina.jeleva1@gmail.com
+        //ageorgieva239@gmail.com
         // Add sender
-        String from = "nelina.jeleva1@gmail.com";
+        String from = "luybo2001@gmail.com";
 
-        final String username = "nelina.jeleva1@gmail.com";//your Gmail username
-        final String password = "";//your Gmail password
+        final String username = "luybo2001@gmail.com";//your Gmail username
+        final String password = "935168413nm";//your Gmail password
 
         String host = "smtp.gmail.com";
 
@@ -51,12 +53,15 @@ public class MailSender {
             message.setSubject("Hi JAXenter");
 
             // Put the content of your message
-            message.setText("Hi there,we are just experimenting with JavaMail here");
+            message.setText("Резервацията е на името на : " + reservation.getUser().getFirstName() +" "+ reservation.getUser().getLastName() + ". Заплатихте :"+reservation.getReservationFinalPrice()+"лв"
+                    +" за концерт  " + reservation.getConcert().getTitle() +
+                    " в зала " + reservation.getConcert().getHall().getConHallName() +
+                    ". Ще ви очакваме на " + reservation.getConcert().getDate());
 
             // Send message
             Transport.send(message);
 
-            System.out.println("Sent message successfully....");
+         //   System.out.println("Sent message successfully....");
 
         } catch (Exception e) {
            throw new RuntimeException("Error accures while sending the email " + e.getMessage());

@@ -1,14 +1,8 @@
 package com.concert.concertApp.controllers;
 
 import com.concert.concertApp.Additional.MailSender;
-import com.concert.concertApp.entities.Concert;
-import com.concert.concertApp.entities.ConcertHall;
-import com.concert.concertApp.entities.Reservation;
-import com.concert.concertApp.entities.User;
-import com.concert.concertApp.repositories.ConcertHallRepository;
-import com.concert.concertApp.repositories.ConcertRepository;
-import com.concert.concertApp.repositories.ReservationRepository;
-import com.concert.concertApp.repositories.UserRepository;
+import com.concert.concertApp.entities.*;
+import com.concert.concertApp.repositories.*;
 import org.hibernate.procedure.ParameterMisuseException;
 import org.hibernate.procedure.ParameterStrategyException;
 import org.springframework.data.domain.Page;
@@ -28,12 +22,16 @@ public class ReservationsController {
     private final ReservationRepository reservationRepo ;
     private final ConcertRepository concertsRepo ;
     private final UserRepository userRepo ;
+    private  final DiscountRepository discountRepo;
 
  ReservationsController(ReservationRepository reservationRepo,
-                        ConcertRepository concertRepo, UserRepository userRepo){
+                        ConcertRepository concertRepo,
+                        UserRepository userRepo,
+                        DiscountRepository discountRepo){
      this.reservationRepo = reservationRepo ;
      this.concertsRepo = concertRepo  ;
      this.userRepo = userRepo ;
+     this.discountRepo = discountRepo ;
  }
 
  @GetMapping("/fetch")
@@ -57,11 +55,15 @@ public class ReservationsController {
  @PostMapping("/save")
     public ResponseEntity<?> saveReservation (Long userId,
                                               Long concertId,
-                                              String numberTickets) {
+                                              String numberTickets,
+                                              Long discount) {
 
+     Discount discountInDb = null ;
      Concert concert = null;
      User user = null;
      try {
+         discountInDb = discountRepo.findById(discount)
+                 .orElseThrow(() -> new IllegalArgumentException());
          concert = concertsRepo.findById(concertId)
                  .orElseThrow(() -> new IllegalArgumentException());
 
@@ -70,33 +72,31 @@ public class ReservationsController {
          Reservation reservation = null ;
          if (concert.getId() != null
                  && user.getId() != null) {
-             double a = 0.1 ;
+             Integer t = Integer.parseInt(numberTickets);
+             double p = Double.parseDouble(concert.getPrice());
+             Integer d = Integer.parseInt(discountInDb.getDiscountPercentage());
+             double a = (t) * (p) - (((t) * (p))* d/100) ;
+
              reservation = new Reservation(numberTickets ,
                      new Date(System.currentTimeMillis()),
                      true, // !
                      true,
-                     (double) 0,
+                     (double) a ,
                      concert,
-                     user
+                     user,
+                     discountInDb
              );
-             reservation.setUser(user);
-             reservation.setConcert(concert);
-             reservation.setReservationDate( new Date(System.currentTimeMillis()));
-             reservation.setReservationPaid(true);
 
          }
 
-         MailSender.sendEmail();
-
          reservation.checkedCapacity(Integer.parseInt(numberTickets));
 
-
          reservationRepo.save(reservation);
-
+         MailSender.sendEmail(reservation);
          return  ResponseEntity.ok("Резервацията беше успешно запазена") ;
      }
      catch (IllegalArgumentException t) {
-         return  new ResponseEntity<>("Няма такъв концерт/протребител с такова id", HttpStatus.OK);
+         return  new ResponseEntity<>("Няма такъв концерт/протребител/отстъпка с такова id", HttpStatus.OK);
 
      }
      catch (ParameterStrategyException s){

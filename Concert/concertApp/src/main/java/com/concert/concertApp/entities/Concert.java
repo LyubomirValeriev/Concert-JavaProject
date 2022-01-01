@@ -77,6 +77,7 @@ public class Concert {
         return title;
     }
 
+
     public void setTitle(String title) {
         this.title = title.trim();
     }
