@@ -1,6 +1,8 @@
 package com.concert.concertApp.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.procedure.ParameterMisuseException;
+import org.hibernate.procedure.ParameterStrategyException;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -9,6 +11,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Set;
+
+import static com.concert.concertApp.entities.ConcertHall.isValidNumber;
 
 @Entity
 @Table(name = "reservation")
@@ -33,6 +37,9 @@ public class Reservation {
     @Column(name = "reservation_final_Price")
     private Double reservationFinalPrice ;
 
+    @Column(name = "reservation_number_of_tickets" , nullable = false )
+    private  String  reservationTickets ;
+
     @ManyToOne
     @JoinColumn(name = "concertId")
     private Concert concert ;
@@ -43,16 +50,20 @@ public class Reservation {
     @JoinColumn(name = "users_Id")
     private User  user ;
 
+
+
     public Reservation() {
     }
 
-    public Reservation(Date reservationDate,
+    public Reservation(String reservationTickets ,
+                        Date reservationDate,
                        boolean reservationPaid,
                        boolean reservationDiscount,
                        Double reservationFinalPrice,
                        Concert concert,
                        User user
                        ) {
+        this.setReservationTickets(reservationTickets);
         this.reservationDate = reservationDate;
         this.reservationPaid = reservationPaid;
         this.reservationDiscount = reservationDiscount;
@@ -123,5 +134,52 @@ public class Reservation {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getReservationTickets() {
+        return reservationTickets;
+    }
+
+    public void setReservationTickets(String reservationTickets) {
+        Integer tickets = 0 ;
+        if(isValidNumber(reservationTickets) == false ){
+            throw  new ParameterMisuseException("Моля въведете само числа за капацитета на залата  !") ;
+        }
+        else {
+            tickets = Integer.parseInt(reservationTickets);
+        }
+        if(tickets <= 0){
+            throw  new ParameterMisuseException("Capacity cannot be 0 or negative number");
+
+        }else if(tickets != tickets.intValue() ){
+            //  conHallCapacity != (int)conHallCapacity
+//            conHallCapacity != conHallCapacity.intValue()
+            throw  new ParameterMisuseException("The number must be an integer!");
+        }
+        this.reservationTickets = reservationTickets;
+    }
+
+    public  void checkedCapacity(Integer reservedTickets){
+        if(
+                concert.getReservedTickets() + reservedTickets >
+                        Integer.parseInt(concert.getHall().getConHallCapacity())){
+
+            throw  new ParameterStrategyException("Няма място вече във залата, моля опитайте по-късно :_( ") ;
+
+        }else if(
+                concert.getReservedTickets() + reservedTickets <=
+                        Integer.parseInt(concert.getHall().getConHallCapacity()))
+        {
+            reservedTickets = reservedTickets + concert.getReservedTickets() ;
+         concert.setReservedTickets(reservedTickets);
+        }
+    }
+
+    public void freeUpSpace(Integer reservedTickets){
+
+        Integer fus =   concert.getReservedTickets() - reservedTickets ;
+        concert.setReservedTickets(
+                fus
+        );
     }
 }

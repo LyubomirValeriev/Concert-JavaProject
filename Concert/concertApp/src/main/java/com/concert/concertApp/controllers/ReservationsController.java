@@ -9,6 +9,8 @@ import com.concert.concertApp.repositories.ConcertHallRepository;
 import com.concert.concertApp.repositories.ConcertRepository;
 import com.concert.concertApp.repositories.ReservationRepository;
 import com.concert.concertApp.repositories.UserRepository;
+import org.hibernate.procedure.ParameterMisuseException;
+import org.hibernate.procedure.ParameterStrategyException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -27,7 +29,8 @@ public class ReservationsController {
     private final ConcertRepository concertsRepo ;
     private final UserRepository userRepo ;
 
- ReservationsController(ReservationRepository reservationRepo , ConcertRepository concertRepo, UserRepository userRepo){
+ ReservationsController(ReservationRepository reservationRepo,
+                        ConcertRepository concertRepo, UserRepository userRepo){
      this.reservationRepo = reservationRepo ;
      this.concertsRepo = concertRepo  ;
      this.userRepo = userRepo ;
@@ -39,18 +42,22 @@ public class ReservationsController {
  }
 
  @DeleteMapping("/delete")
-    public ResponseEntity<?> deleteReservation(Long id){
-     Optional<Reservation> reservation = reservationRepo.findById(id);
+    public ResponseEntity<?> deleteReservation(Long ReservationId){
+    
+     Optional<Reservation> reservation = reservationRepo.findById(ReservationId);
      if(reservation.isEmpty()){
-         return ResponseEntity.ok("Няма такава резервация ;(");
+         return ResponseEntity.ok("Няма такава резервация ;");
      }
+     Reservation reservation1  = reservationRepo.findReservationById(ReservationId);
+     reservation1.freeUpSpace(Integer.parseInt(reservation1.getReservationTickets()));
      reservationRepo.delete(reservation.get());
-     return  ResponseEntity.ok("Резервацията с id:" + id + " е изтрита ");
+     return  ResponseEntity.ok("Резервацията с id:" + ReservationId + " е изтрита ");
  }
 
  @PostMapping("/save")
     public ResponseEntity<?> saveReservation (Long userId,
-                                              Long concertId) {
+                                              Long concertId,
+                                              String numberTickets) {
 
      Concert concert = null;
      User user = null;
@@ -64,9 +71,9 @@ public class ReservationsController {
          if (concert.getId() != null
                  && user.getId() != null) {
              double a = 0.1 ;
-             reservation = new Reservation(
+             reservation = new Reservation(numberTickets ,
                      new Date(System.currentTimeMillis()),
-                     true,
+                     true, // !
                      true,
                      (double) 0,
                      concert,
@@ -78,16 +85,33 @@ public class ReservationsController {
              reservation.setReservationPaid(true);
 
          }
+<<<<<<< HEAD
          MailSender.sendEmail();
+=======
+
+         reservation.checkedCapacity(Integer.parseInt(numberTickets));
+
+>>>>>>> Luybo-Reservations-
          reservationRepo.save(reservation);
 
          return  ResponseEntity.ok("Резервацията беше успешно запазена") ;
      }
      catch (IllegalArgumentException t) {
          return  new ResponseEntity<>("Няма такъв концерт/протребител с такова id", HttpStatus.OK);
+<<<<<<< HEAD
      }catch (RuntimeException re){
         return ResponseEntity.ok(re.getMessage());
     }catch (Exception e) {
+=======
+
+     }catch (ParameterMisuseException p){
+         return  new ResponseEntity<>(p.getMessage(), HttpStatus.OK);
+
+     }catch (ParameterStrategyException s){
+         return  new ResponseEntity<>(s.getMessage(), HttpStatus.OK);
+     }
+     catch (Exception e) {
+>>>>>>> Luybo-Reservations-
          return  new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
      }
 
