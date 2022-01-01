@@ -85,33 +85,30 @@ public class ReservationsController {
              reservation.setReservationPaid(true);
 
          }
-<<<<<<< HEAD
+
          MailSender.sendEmail();
-=======
 
          reservation.checkedCapacity(Integer.parseInt(numberTickets));
 
->>>>>>> Luybo-Reservations-
+
          reservationRepo.save(reservation);
 
          return  ResponseEntity.ok("Резервацията беше успешно запазена") ;
      }
      catch (IllegalArgumentException t) {
          return  new ResponseEntity<>("Няма такъв концерт/протребител с такова id", HttpStatus.OK);
-<<<<<<< HEAD
-     }catch (RuntimeException re){
-        return ResponseEntity.ok(re.getMessage());
-    }catch (Exception e) {
-=======
 
-     }catch (ParameterMisuseException p){
-         return  new ResponseEntity<>(p.getMessage(), HttpStatus.OK);
-
-     }catch (ParameterStrategyException s){
+     }
+     catch (ParameterStrategyException s){
          return  new ResponseEntity<>(s.getMessage(), HttpStatus.OK);
      }
+     catch ( ParameterMisuseException p) {
+         return  new ResponseEntity<>(p.getMessage() , HttpStatus.OK) ;
+     }
+     catch (RuntimeException re){
+        return ResponseEntity.ok(re.getMessage());
+     }
      catch (Exception e) {
->>>>>>> Luybo-Reservations-
          return  new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
      }
 

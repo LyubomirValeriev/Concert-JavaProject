@@ -5,19 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8380620b-a010-4884-a547-009ec9b5611a" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/concertApp_war.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/concertApp_war.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/concertApp_war_exploded.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/concertApp_war_exploded.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/runConfigurations.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Concert/concertApp/concertApp.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Concert/concertApp/concertApp.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Concert/concertApp/src/main/java/com/concert/concertApp/controllers/ConcertsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Concert/concertApp/src/main/java/com/concert/concertApp/controllers/ConcertsController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Concert/concertApp/src/main/java/com/concert/concertApp/controllers/ReservationsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Concert/concertApp/src/main/java/com/concert/concertApp/controllers/ReservationsController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Concert/concertApp/src/main/java/com/concert/concertApp/entities/Concert.java" beforeDir="false" afterPath="$PROJECT_DIR$/Concert/concertApp/src/main/java/com/concert/concertApp/entities/Concert.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Concert/concertApp/src/main/java/com/concert/concertApp/entities/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/Concert/concertApp/src/main/java/com/concert/concertApp/entities/User.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Concert/concertApp/target/classes/com/concert/concertApp/controllers/ConcertsController.class" beforeDir="false" afterPath="$PROJECT_DIR$/Concert/concertApp/target/classes/com/concert/concertApp/controllers/ConcertsController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Concert/concertApp/target/classes/com/concert/concertApp/entities/Concert.class" beforeDir="false" afterPath="$PROJECT_DIR$/Concert/concertApp/target/classes/com/concert/concertApp/entities/Concert.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Concert/concertApp/target/classes/com/concert/concertApp/entities/ConcertHall.class" beforeDir="false" afterPath="$PROJECT_DIR$/Concert/concertApp/target/classes/com/concert/concertApp/entities/ConcertHall.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Concert/concertApp/target/classes/com/concert/concertApp/entities/Performer.class" beforeDir="false" afterPath="$PROJECT_DIR$/Concert/concertApp/target/classes/com/concert/concertApp/entities/Performer.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Concert/concertApp/target/classes/com/concert/concertApp/entities/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/Concert/concertApp/target/classes/com/concert/concertApp/entities/User.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,9 +53,12 @@
         <entry key="JPA Structure" value="false" />
         <entry key="com.haulmont.jpb.jpaInspector" value="false" />
         <entry key="com.haulmont.jpb.jpaPalette" value="false" />
-        <entry key="com.haulmont.jpb.jpaStructure" value="true" />
+        <entry key="com.haulmont.jpb.jpaStructure" value="false" />
       </map>
     </option>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="21QXyxydfIM1oW1XoL778jhD6Ua" />
   <component name="ProjectViewState">
@@ -113,6 +109,7 @@
       <workItem from="1638008268750" duration="1375000" />
       <workItem from="1638011781385" duration="260000" />
       <workItem from="1638014151032" duration="5664000" />
+      <workItem from="1641061474191" duration="464000" />
     </task>
     <servers />
   </component>

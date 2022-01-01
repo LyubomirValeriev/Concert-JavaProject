@@ -129,7 +129,7 @@ public class Concert {
         this.hall = hall;
     }
 
-<<<<<<< HEAD
+
     public static boolean isNumeric(String price) {
         try {
             Double.parseDouble(price);
@@ -137,14 +137,14 @@ public class Concert {
         } catch (NumberFormatException e) {
             return false;
         }
-=======
-    public Integer getReservedTickets() {
+    }
+    public Integer getReservedTickets(){
         return reservedTickets;
     }
 
     public void setReservedTickets(Integer reservedTickets) {
         this.reservedTickets = reservedTickets;
->>>>>>> Luybo-Reservations-
+
     }
 }
 
