@@ -5,6 +5,7 @@ import com.concert.concertApp.entities.*;
 import com.concert.concertApp.repositories.*;
 import org.hibernate.procedure.ParameterMisuseException;
 import org.hibernate.procedure.ParameterStrategyException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -58,27 +59,27 @@ public class ReservationsController {
                                               String numberTickets,
                                               Long discount) {
 
-     if(discount == null ||
-             discount < 0 )
-         throw  new ParameterMisuseException("Моля въведете коректна стойност за отстъпката, която  искате да използвате ") ;
      Discount discountInDb = null ;
      Concert concert = null;
      User user = null;
      try {
          discountInDb = discountRepo.findById(discount)
-                 .orElseThrow(() -> new IllegalArgumentException());
+                 .orElseThrow(() -> new IllegalArgumentException("проверете id-то на потребителя отново <3"));
          concert = concertsRepo.findById(concertId)
-                 .orElseThrow(() -> new IllegalArgumentException());
+                 .orElseThrow(() -> new IllegalArgumentException("Не е намерен концерт с такова id"));
 
          user = userRepo.findUserById(userId)
-                 .orElseThrow(() -> new IllegalArgumentException());
+                 .orElseThrow(() -> new IllegalArgumentException("Не е намерен потребител с такова id"));
+
          Reservation reservation = null ;
          if (concert.getId() != null
                  && user.getId() != null) {
+
              Integer t = Integer.parseInt(numberTickets);
-             double p = Double.parseDouble(concert.getPrice());
+             double p = Double.parseDouble(concert.getPrice())  ;
              Integer d = Integer.parseInt(discountInDb.getDiscountPercentage());
-             double a = (t) * (p) - (((t) * (p))* d/100) ;
+
+             double a = (t) * (p) - (((t) * (p))* d/100) ; // смята отстъпка
 
              reservation = new Reservation(numberTickets ,
                      new Date(System.currentTimeMillis()),
@@ -95,20 +96,22 @@ public class ReservationsController {
          MailSender.sendEmail(reservation);
          return  ResponseEntity.ok("Резервацията беше успешно запазена") ;
      }
+     catch (DataIntegrityViolationException e) {
+         return  new ResponseEntity<>("Не сте въвели всички елементи, опитайте отново!", HttpStatus.OK);
+     }
      catch (IllegalArgumentException t) {
-         return  new ResponseEntity<>("Задължително е да се попълнят всички полета ! Проверете данните си отново " + "\n" +
-                 "(Възможни грешки : 1) празно поле от userId,concertId, discount \n 2) въведени са твърде много синволи в някое поле )", HttpStatus.OK);
-
-     }
-     catch (ParameterStrategyException s){
-         return  new ResponseEntity<>(s.getMessage(), HttpStatus.OK);
-     }
-     catch ( ParameterMisuseException p) {
-         return  new ResponseEntity<>(p.getMessage() , HttpStatus.OK) ;
+         return  new ResponseEntity<>(t.getMessage(), HttpStatus.OK);
      }
      catch (RuntimeException re){
-        return ResponseEntity.ok(re.getMessage());
+         return ResponseEntity.ok(re.getMessage());
      }
+//     catch (ParameterStrategyException s){
+//         return  new ResponseEntity<>(s.getMessage(), HttpStatus.OK);
+//     }
+//     catch ( ParameterMisuseException p) {
+//         return  new ResponseEntity<>(p.getMessage() , HttpStatus.OK) ;
+//     }
+//
      catch (Exception e) {
          return  new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
      }

@@ -68,7 +68,8 @@ public class Discount {
             //  conHallCapacity != (int)conHallCapacity
 //            conHallCapacity != conHallCapacity.intValue()
             throw  new ParameterMisuseException("Отстъпката трябва да е цяло число!");
-        }
+        }else if(percent >100)
+            throw  new ParameterMisuseException("Отстъпката не може да е число по-голямо от 100, иначе ние трябва да ви платим :_( ");
         this.discountPercentage = discountPercentage;
     }
 }
