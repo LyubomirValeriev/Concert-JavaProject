@@ -11,17 +11,20 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
+
 public class MailSender {
+
+   private static final String username = "gtconcert@gmail.com";
+  private  static final String password = "123456789lni";
+
     public static void sendEmail(Reservation reservation) {
         // Add recipient
-        String to = "ageorgieva239@gmail.com";
+        String to = "luybomir2001@abv.bg";
+        String toUserEmail = reservation.getUser().getEmail();
             // nelina.jeleva1@gmail.com
         //ageorgieva239@gmail.com
         // Add sender
-        String from = "luybo2001@gmail.com";
-
-        final String username = "luybo2001@gmail.com";//your Gmail username
-        final String password = "935168413nm";//your Gmail password
+        String from = "gtconcert@gmail.com";
 
         String host = "smtp.gmail.com";
 
@@ -50,13 +53,15 @@ public class MailSender {
                     InternetAddress.parse(to));
 
             // Set Subject
-            message.setSubject("Hi JAXenter");
+            message.setSubject("Вашата резервация");
 
             // Put the content of your message
-            message.setText("Резервацията е на името на : " + reservation.getUser().getFirstName() +" "+ reservation.getUser().getLastName() + ". Заплатихте :"+reservation.getReservationFinalPrice()+"лв"
-                    +" за концерт  " + reservation.getConcert().getTitle() +
-                    " в зала " + reservation.getConcert().getHall().getConHallName() +
-                    ". Ще ви очакваме на " + reservation.getConcert().getDate());
+            message.setText("Резервацията е на името на : " + reservation.getUser().getFirstName() +" "+ reservation.getUser().getLastName() +"\n"
+                    + "Заплатихте :"+reservation.getReservationFinalPrice()+"лв"+"\n"
+                    +"Концерт :" + reservation.getConcert().getTitle() +"\n"
+                    +"Зала " + reservation.getConcert().getHall().getConHallName() +"\n"
+                   + "Ще Ви очакваме на " + reservation.getConcert().getDate()+"\n"
+            );
 
             // Send message
             Transport.send(message);

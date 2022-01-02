@@ -63,9 +63,9 @@ public class Reservation {
                        boolean reservationPaid,
                        boolean reservationDiscount,
                        Double reservationFinalPrice,
-
                        Concert concert,
-                       User user,Discount discount
+                       User user,
+                       Discount discount
                        ) {
         this.setReservationTickets(reservationTickets);
         this.reservationDate = reservationDate;

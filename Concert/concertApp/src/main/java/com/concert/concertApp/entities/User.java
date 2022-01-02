@@ -98,7 +98,7 @@ public class User {
         this.age = age;
     }
 
-    public String getEmail(String email) {
+    public String getEmail() {
         return email;
     }
 

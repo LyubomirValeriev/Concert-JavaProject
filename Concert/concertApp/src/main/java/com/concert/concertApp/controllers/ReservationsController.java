@@ -58,6 +58,9 @@ public class ReservationsController {
                                               String numberTickets,
                                               Long discount) {
 
+     if(discount == null ||
+             discount < 0 )
+         throw  new ParameterMisuseException("Моля въведете коректна стойност за отстъпката, която  искате да използвате ") ;
      Discount discountInDb = null ;
      Concert concert = null;
      User user = null;
@@ -86,17 +89,15 @@ public class ReservationsController {
                      user,
                      discountInDb
              );
-
          }
-
          reservation.checkedCapacity(Integer.parseInt(numberTickets));
-
          reservationRepo.save(reservation);
          MailSender.sendEmail(reservation);
          return  ResponseEntity.ok("Резервацията беше успешно запазена") ;
      }
      catch (IllegalArgumentException t) {
-         return  new ResponseEntity<>("Няма такъв концерт/протребител/отстъпка с такова id", HttpStatus.OK);
+         return  new ResponseEntity<>("Задължително е да се попълнят всички полета ! Проверете данните си отново " + "\n" +
+                 "(Възможни грешки : 1) празно поле от userId,concertId, discount \n 2) въведени са твърде много синволи в някое поле )", HttpStatus.OK);
 
      }
      catch (ParameterStrategyException s){
