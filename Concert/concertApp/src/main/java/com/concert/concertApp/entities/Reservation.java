@@ -43,6 +43,11 @@ public class Reservation {
     @JoinColumn(name = "users_Id")
     private User  user ;
 
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "discount_id")
+    private Discount discount;
+
     public Reservation() {
     }
 
@@ -123,5 +128,13 @@ public class Reservation {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Discount getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Discount discount) {
+        this.discount = discount;
     }
 }
