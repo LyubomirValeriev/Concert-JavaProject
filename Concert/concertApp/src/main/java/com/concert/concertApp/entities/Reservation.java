@@ -26,9 +26,6 @@ public class Reservation {
     private Date reservationDate ;
 
 
-    @Column(name = "reservation_ispaid")
-    private boolean reservationPaid ;
-
 
     @Column(name = "reservation_discount")
     private boolean reservationDiscount ;
@@ -60,7 +57,7 @@ public class Reservation {
 
     public Reservation(String reservationTickets ,
                         Date reservationDate,
-                       boolean reservationPaid,
+
                        boolean reservationDiscount,
                        Double reservationFinalPrice,
                        Concert concert,
@@ -69,7 +66,6 @@ public class Reservation {
                        ) {
         this.setReservationTickets(reservationTickets);
         this.reservationDate = reservationDate;
-        this.reservationPaid = reservationPaid;
         this.reservationDiscount = reservationDiscount;
         this.reservationFinalPrice = reservationFinalPrice;
         this.concert = concert;
@@ -115,14 +111,6 @@ public class Reservation {
 
 
         this.reservationDate = reservationDate ;
-    }
-
-    public boolean isReservationPaid() {
-        return reservationPaid;
-    }
-
-    public void setReservationPaid(boolean reservationPaid) {
-        this.reservationPaid = reservationPaid;
     }
 
     public boolean isReservationDiscount() {

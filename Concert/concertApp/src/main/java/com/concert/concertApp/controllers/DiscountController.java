@@ -26,7 +26,7 @@ public class DiscountController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<?> saceDiscount(String name,
+    public ResponseEntity<?> saveDiscount(String name,
                                           String percent) {
         if (name == null ||
                 name.isEmpty())
@@ -53,14 +53,13 @@ public class DiscountController {
         } catch (DataIntegrityViolationException e) {
             return ResponseEntity.ok("Не сте въвели всички елементи, опитайте отново!");
         }  catch (ParameterRecognitionException e) {
-            return  ResponseEntity.ok( e.getMessage()) ;
+            return  ResponseEntity.ok( e.getMessage());
         }
         catch (NullPointerException e ){
             return  ResponseEntity.ok(e.getMessage());
         }
         catch (Exception e ){
             return ResponseEntity.ok(e.getMessage());
-
         }
     }
 

@@ -75,17 +75,16 @@ public class ReservationsController {
          if (concert.getId() != null
                  && user.getId() != null) {
 
-             Integer t = Integer.parseInt(numberTickets);
-             double p = Double.parseDouble(concert.getPrice())  ;
-             Integer d = Integer.parseInt(discountInDb.getDiscountPercentage());
+             Integer ticketsNumber = Integer.parseInt(numberTickets);
+             double price = Double.parseDouble(concert.getPrice())  ;
+             Integer discountPercent = Integer.parseInt(discountInDb.getDiscountPercentage());
 
-             double a = (t) * (p) - (((t) * (p))* d/100) ; // смята отстъпка
+             double finalPrice = (ticketsNumber) * (price) - (((ticketsNumber) * (price))* discountPercent/100) ; // смята отстъпка
 
              reservation = new Reservation(numberTickets ,
                      new Date(System.currentTimeMillis()),
-                     true, // !
-                     true,
-                     (double) a ,
+                     (discountPercent != null)? true : false ,
+                     finalPrice ,
                      concert,
                      user,
                      discountInDb
@@ -105,13 +104,7 @@ public class ReservationsController {
      catch (RuntimeException re){
          return ResponseEntity.ok(re.getMessage());
      }
-//     catch (ParameterStrategyException s){
-//         return  new ResponseEntity<>(s.getMessage(), HttpStatus.OK);
-//     }
-//     catch ( ParameterMisuseException p) {
-//         return  new ResponseEntity<>(p.getMessage() , HttpStatus.OK) ;
-//     }
-//
+
      catch (Exception e) {
          return  new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
      }

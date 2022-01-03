@@ -11,11 +11,10 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
-
 public class MailSender {
 
    private static final String username = "gtconcert@gmail.com";
-  private  static final String password = "123456789lni";
+   private  static final String password = "123456789lni";
 
     public static void sendEmail(Reservation reservation) {
         String to = "luybomir2001@abv.bg";
@@ -51,15 +50,20 @@ public class MailSender {
             message.setFrom(new InternetAddress(from));
 
             message.setRecipients(Message.RecipientType.TO,
-                    InternetAddress.parse(to));
+                    InternetAddress.parse(toUserEmail));
 
             message.setSubject("Вашата резервация");
+            
+            message.setText(
+                    "--------------------------Резервацията е на името на: "+ reservation.getUser().getFirstName() +" "+ reservation.getUser().getLastName() + "--------------------------"+"\n"
+                            +"---------------------------------------{Брой билети : "+ reservation.getReservationTickets()+ " --------------------------"+"\n"
+                   +"--------------------------------------- първоначална цена: " + Integer.parseInt(reservation.getReservationTickets())+"*"+ Double.parseDouble(reservation.getConcert().getPrice())+"="+Integer.parseInt(reservation.getReservationTickets())*Double.parseDouble(reservation.getConcert().getPrice())+"лв "+ "--------------------------"+"\n"
+                            +"--------------------------------------- Отстъпка: " + reservation.getDiscount().getDiscountName()+" ("+reservation.getDiscount().getDiscountPercentage()+"%) "+"--------------------------"+"\n"
+                            +"--------------------------------------- Крайна Цена: " +reservation.getReservationFinalPrice()+"лв }"+ "--------------------------"+"\n"
+                            +"--------------------------------------- Концерт: " + reservation.getConcert().getTitle() +" "+ "--------------------------"+"\n"
+                            +"--------------------------------------- Зала: " + reservation.getConcert().getHall().getConHallName() +" "+ "--------------------------"+"\n"
+                            +"--------------------------------------- Ще Ви очакваме на : " + reservation.getConcert().getDate() +" "+ "--------------------------"+"\n"
 
-            message.setText("Резервацията е на името на : " + reservation.getUser().getFirstName() +" "+ reservation.getUser().getLastName() +"\n"
-                    + "Заплатихте :"+reservation.getReservationFinalPrice()+"лв"+"\n"
-                    +"Концерт :" + reservation.getConcert().getTitle() +"\n"
-                    +"Зала " + reservation.getConcert().getHall().getConHallName() +"\n"
-                   + "Ще Ви очакваме на " + reservation.getConcert().getDate()+"\n"
             );
             Transport.send(message);
         } catch (Exception e) {

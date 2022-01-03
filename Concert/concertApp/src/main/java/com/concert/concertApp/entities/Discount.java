@@ -61,7 +61,7 @@ public class Discount {
         else {
             percent = Integer.parseInt(discountPercentage);
         }
-        if(percent < 0){
+        if(percent <= 0){
             throw  new ParameterMisuseException("Отстъпката не може да бъде отрицателно число!");
 
         }else if(percent != percent.intValue() ){
