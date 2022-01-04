@@ -17,12 +17,7 @@ public class MailSender {
    private  static final String password = "123456789lni";
 
     public static void sendEmail(Reservation reservation) {
-        String to = "luybomir2001@abv.bg";
-        String toUserEmail = reservation.getUser().getEmail();
-
-        // nelina.jeleva1@gmail.com
-        //ageorgieva239@gmail.com
-
+        String to = reservation.getUser().getEmail();
 
         String from = "gtconcert@gmail.com";
 
@@ -50,7 +45,7 @@ public class MailSender {
             message.setFrom(new InternetAddress(from));
 
             message.setRecipients(Message.RecipientType.TO,
-                    InternetAddress.parse(toUserEmail));
+                    InternetAddress.parse(to));
 
             message.setSubject("Вашата резервация");
             
