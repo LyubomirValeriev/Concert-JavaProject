@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
+import static com.concert.concertApp.entities.ConcertHall.isValidNumber;
+
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/Reservation")
@@ -45,12 +47,12 @@ public class ReservationsController {
     
      Optional<Reservation> reservation = reservationRepo.findById(ReservationId);
      if(reservation.isEmpty()){
-         return ResponseEntity.ok("Няма такава резервация ;");
+         return ResponseEntity.ok("Reservation not found ! ;");
      }
      Reservation reservation1  = reservationRepo.findReservationById(ReservationId);
      reservation1.freeUpSpace(Integer.parseInt(reservation1.getReservationTickets()));
      reservationRepo.delete(reservation.get());
-     return  ResponseEntity.ok("Резервацията с id:" + ReservationId + " е изтрита ");
+     return  ResponseEntity.ok("Reservation with id:" + ReservationId + " was deleted");
  }
 
  @PostMapping("/save")
@@ -63,27 +65,49 @@ public class ReservationsController {
      Concert concert = null;
      User user = null;
      try {
-         discountInDb = discountRepo.findById(discount)
-                 .orElseThrow(() -> new IllegalArgumentException("проверете id-то на потребителя отново <3"));
-         concert = concertsRepo.findById(concertId)
-                 .orElseThrow(() -> new IllegalArgumentException("Не е намерен концерт с такова id"));
+         if(discount != null) {
+             discountInDb = discountRepo.findById(discount)
+                     .orElseThrow(() -> new IllegalArgumentException("Check  discount id again <3"));
+         }else if (discount == null)
+             throw  new IllegalArgumentException("Enter discount id to create reservation");
 
-         user = userRepo.findUserById(userId)
-                 .orElseThrow(() -> new IllegalArgumentException("Не е намерен потребител с такова id"));
+         if(concertId != null ) {
+             concert = concertsRepo.findById(concertId)
+                     .orElseThrow(() -> new IllegalArgumentException("Check concert id again <3"));
+         }else if(concertId == null)
+         {
+             throw  new IllegalArgumentException("Enter concert to create reservation");
+         }
 
-         Reservation reservation = null ;
+         if(userId != null) {
+             user = userRepo.findUserById(userId)
+                     .orElseThrow(() -> new IllegalArgumentException("Check  user id again <3"));
+         }
+         else if(userId == null )
+         {
+             throw  new IllegalArgumentException("Enter user id to create reservation");
+         }
+
+         if(numberTickets == null || numberTickets.isEmpty()) {
+             throw new IllegalArgumentException("Enter number of tickets which you want to buy to create reservation");
+         }else if(!isValidNumber(numberTickets)){
+             throw  new IllegalArgumentException("Enter only numbers !");
+         }
+
+         Reservation reservation = null;
          if (concert.getId() != null
                  && user.getId() != null) {
 
              Integer ticketsNumber = Integer.parseInt(numberTickets);
-             double price = Double.parseDouble(concert.getPrice())  ;
+             double price = Double.parseDouble(concert.getPrice());
+
              Integer discountPercent = Integer.parseInt(discountInDb.getDiscountPercentage());
 
-             double finalPrice = (ticketsNumber) * (price) - (((ticketsNumber) * (price))* discountPercent/100) ; // смята отстъпка
+             double finalPrice = (ticketsNumber) * (price) - (((ticketsNumber) * (price)) * discountPercent / 100); // смята отстъпка
 
-             reservation = new Reservation(numberTickets ,
+             reservation = new Reservation(numberTickets,
                      new Date(System.currentTimeMillis()),
-                     (discountPercent != null)? true : false ,
+                     ((ticketsNumber) * (price) != (ticketsNumber) * (price))? true : false ,
                      finalPrice ,
                      concert,
                      user,
@@ -93,10 +117,10 @@ public class ReservationsController {
          reservation.checkedCapacity(Integer.parseInt(numberTickets));
          reservationRepo.save(reservation);
          MailSender.sendEmail(reservation);
-         return  ResponseEntity.ok("Резервацията беше успешно запазена") ;
+         return  ResponseEntity.ok("The reservation was successfully saved, check your e-mail") ;
      }
      catch (DataIntegrityViolationException e) {
-         return  new ResponseEntity<>("Не сте въвели всички елементи, опитайте отново!", HttpStatus.OK);
+         return  new ResponseEntity<>("It is mandatory to fill all concert hall fields correctly. Check your personal data.!", HttpStatus.OK);
      }
      catch (IllegalArgumentException t) {
          return  new ResponseEntity<>(t.getMessage(), HttpStatus.OK);
@@ -111,24 +135,5 @@ public class ReservationsController {
 
 
  }
-// @GetMapping("/pages")
-//    public ResponseEntity<?> filterReservations( @RequestParam(defaultValue = "0") Double reservationFinalPrice ,
-//                                                 @RequestParam(defaultValue = "1") int currentPage,
-//                                                 @RequestParam(defaultValue = "5") int perPage){
-//
-//        Pageable pageable = PageRequest.of(currentPage - 1, perPage);
-//        Page<Reservation> results = reservationRepo.filterReservations(
-//                pageable,
-//                reservationFinalPrice
-//        );
-//
-//
-//
-//        Map<String, Object> response = new HashMap();
-//        response.put("totalElements", results.getTotalElements());
-//        response.put("totalPages", results.getTotalPages());
-//        response.put("halls", results.getContent());
-//
-//        return  ResponseEntity.ok(response);
-//    }
+
 }

@@ -15,7 +15,7 @@ public class ConcertHallRequest {
 
     String capacity ;
 
-    String adress ;
+    String address ;
 
     public String getConHallName() {
         return conHallName;
@@ -44,12 +44,12 @@ public class ConcertHallRequest {
         this.capacity = capacity;
     }
 
-    public String getAdress() {
-        return adress;
+    public String getAddress() {
+        return address;
     }
 
-    public void setAdress(String adress) {
-        this.adress = adress;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
 

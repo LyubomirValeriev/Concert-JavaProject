@@ -27,7 +27,7 @@ private Set<ConcertHall> hall ;
 
     public City(String name) {
 
-        this.name = name;
+        this.setName(name);
     }
 
     public Long getId() {

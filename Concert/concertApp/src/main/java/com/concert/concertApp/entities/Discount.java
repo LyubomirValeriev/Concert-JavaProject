@@ -19,7 +19,7 @@ public class Discount {
     @Column(name = "discount_name", length =  40,nullable = false)
     private  String discountName ;
 
-    @Column(name = " discount_ercentage", length =  3, nullable = false)
+    @Column(name = " discount_percentage", length =  3, nullable = false)
     private  String discountPercentage ;
 
     public Discount() {
@@ -41,11 +41,11 @@ public class Discount {
     public void setDiscountName(String discountName) {
         if(discountName == null ||
         discountName.isEmpty())
-           throw  new  NullPointerException("Моля въвете име на отсктъпката");
+           throw  new  NullPointerException("Enter a name for the discount");
 
         boolean ok = discountName.chars().allMatch(Character::isLetter);
         if(!ok)
-            throw new ParameterRecognitionException("Моля провелете името на отстъпката отново :)") ;
+            throw new ParameterRecognitionException("Please check the name of the discount again :)") ;
         this.discountName = discountName;
     }
 
@@ -56,20 +56,20 @@ public class Discount {
     public void setDiscountPercentage(String discountPercentage) {
         Integer percent = 0 ;
         if(isValidNumber(discountPercentage) == false ){
-            throw  new ParameterMisuseException("Моля въведете само числа за отстъпката!") ;
+            throw  new ParameterMisuseException("Please enter only numbers for the percentage of the discount!") ;
         }
         else {
             percent = Integer.parseInt(discountPercentage);
         }
         if(percent <= 0){
-            throw  new ParameterMisuseException("Отстъпката не може да бъде отрицателно число!");
+            throw  new ParameterMisuseException("The discount cannot be a negative number!");
 
         }else if(percent != percent.intValue() ){
             //  conHallCapacity != (int)conHallCapacity
 //            conHallCapacity != conHallCapacity.intValue()
-            throw  new ParameterMisuseException("Отстъпката трябва да е цяло число!");
+            throw  new ParameterMisuseException("The discount must be an integer!");
         }else if(percent >100)
-            throw  new ParameterMisuseException("Отстъпката не може да е число по-голямо от 100, иначе ние трябва да ви платим :_( ");
+            throw  new ParameterMisuseException("The discount cannot be a number greater than 100, otherwise we have to pay you :_( ");
         this.discountPercentage = discountPercentage;
     }
 }

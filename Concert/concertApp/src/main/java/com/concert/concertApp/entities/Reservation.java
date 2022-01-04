@@ -146,7 +146,7 @@ public class Reservation {
     public void setReservationTickets(String reservationTickets) {
         Integer tickets = 0 ;
         if(isValidNumber(reservationTickets) == false ){
-            throw  new ParameterMisuseException("Моля въведете само числа за капацитета на залата  !") ;
+            throw  new ParameterMisuseException("Please enter only  numbers for the tickets you want !" ) ;
         }
         else {
             tickets = Integer.parseInt(reservationTickets);
@@ -167,7 +167,7 @@ public class Reservation {
                 concert.getReservedTickets() + reservedTickets >
                         Integer.parseInt(concert.getHall().getConHallCapacity())){
 
-            throw  new ParameterStrategyException("Няма място вече във залата, моля опитайте по-късно :_( ") ;
+            throw  new ParameterStrategyException("There is no more space in the hall, please try later :_( ") ;
 
         }else if(
                 concert.getReservedTickets() + reservedTickets <=

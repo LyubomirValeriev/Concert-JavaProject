@@ -24,8 +24,8 @@ public class ConcertHall {
     private  String conHallName ;
 
 
-    @Column(name = "con_hall_adress",nullable = false , length =  30)
-    private  String conHallAdress ;
+    @Column(name = "con_hall_address",nullable = false , length =  30)
+    private  String conHallAddress ;
 
     @Column(name = "con_hall_capacity",nullable = false)
     @JsonIgnore
@@ -42,22 +42,22 @@ public class ConcertHall {
     }
 
     public ConcertHall( String conHallName,
-                        String conHallAdress,
+                        String conHallAddress,
                         String conHallCapacity
             , City city) {
 
         this.setConHallName(conHallName);
-           // this.conHallName = conHallName;
-
-            this.conHallAdress = conHallAdress.trim();
-            this.city = city;
-            this.setConHallCapacity(conHallCapacity);
-            //this.conHallCapacity = conHallCapacity;
+        this.conHallAddress = conHallAddress.trim();
+        this.setCity(city);
+        this.setConHallCapacity(conHallCapacity);
+        //this.conHallCapacity = conHallCapacity;
+        // this.city = city;
+        // this.conHallName = conHallName;
     }
 
-    public ConcertHall(String conHallName, String conHallAdressm ,String conHallCapacity ) {
+    public ConcertHall(String conHallName, String conHallAddress ,String conHallCapacity ) {
         this.conHallName = conHallName;
-        this.conHallAdress = conHallAdress;
+        this.conHallAddress = conHallAddress;
         this.conHallCapacity = conHallCapacity ;
     }
 
@@ -66,6 +66,8 @@ public class ConcertHall {
     }
 
     public void setCity(City city) {
+        if(city == null)
+            throw  new NullPointerException("Please enter name of city") ;
         this.city = city;
     }
 
@@ -83,20 +85,20 @@ public class ConcertHall {
 
         if(conHallName== null
                 || conHallName.isEmpty())
-        throw new NullPointerException("Моля въведете адрес");
+        throw new NullPointerException("Please enter name");
 
         if(isNameValid(conHallName) == false )
-            throw  new ParameterRecognitionException("Въведете правилно име <3") ;
+            throw  new ParameterRecognitionException("Еnter a valid name <3") ;
 
         this.conHallName = conHallName.trim();
     }
 
-    public String getConHallAdress() {
-        return conHallAdress;
+    public String getConHallAddress() {
+        return conHallAddress;
     }
 
-    public void setConHallAdress(String conHallAdress) {
-        this.conHallAdress = conHallAdress;
+    public void setConHallAddress(String conHallAddress) {
+        this.conHallAddress = conHallAddress;
     }
 
 
@@ -108,13 +110,13 @@ public class ConcertHall {
     public void setConHallCapacity(String conHallCapacity) {
       Integer conCap = 0 ;
         if(isValidNumber(conHallCapacity) == false ){
-            throw  new ParameterMisuseException("Моля въведете само числа за капацитета на залата  !") ;
+            throw  new ParameterMisuseException("Please enter only integers for the capacity of the hall!") ;
         }
         else {
             conCap = Integer.parseInt(conHallCapacity);
         }
         if(conCap <= 0){
-            throw  new ParameterMisuseException("Capacity cannot be 0 or negative number");
+            throw  new ParameterMisuseException("Capacity cannot be 0 or negative number!");
 
         }else if(conCap != conCap.intValue() ){
             //  conHallCapacity != (int)conHallCapacity

@@ -7,6 +7,7 @@ import com.concert.concertApp.payload.ConcertHallRequest;
 import com.concert.concertApp.repositories.CityRepository;
 import com.concert.concertApp.repositories.ConcertHallRepository;
 import org.hibernate.engine.query.ParameterRecognitionException;
+import org.hibernate.procedure.ParameterMisuseException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -42,25 +43,34 @@ public class ConcertHallController {
     }
 
     @GetMapping("/find/adress")
-    public ResponseEntity<?> findHall(String adress) {
-        Optional<ConcertHall> result = concertHallRepo.findConcertHallByConHallAdress(adress.trim());
+    public ResponseEntity<?> findHall(String address) {
+        Optional<ConcertHall> result = concertHallRepo.findConcertHallByConHallAddress(address);
 
         return result.isPresent()
                 ?ResponseEntity.ok(result.get())
-                : ResponseEntity.ok("not found Concert Hall with adress:" + adress);
+                : ResponseEntity.ok("Not found Concert Hall with adress:" + address);
     }
     @PostMapping("/save/hall")
     public  ResponseEntity<?> saveConHall(
             @RequestBody ConcertHallRequest conHallRequest){
 
-        ConcertHall concertHallInDb = concertHallRepo.findConcertHallByAdress(conHallRequest.getAdress());
+        if( conHallRequest.getCity() == null|| conHallRequest.getCity().isEmpty() )
+            return ResponseEntity.ok("Enter a city name to create a concert hall!");
 
+        if( conHallRequest.getAddress() == null|| conHallRequest.getAddress().isEmpty() )
+            return ResponseEntity.ok("Enter a address to create a concert hall!");
+
+        if( conHallRequest.getCapacity() == null|| conHallRequest.getCapacity().isEmpty() )
+            return ResponseEntity.ok("Enter a capacity to create a concert hall!");
+
+        ConcertHall concertHallInDb = concertHallRepo.findConcertHallByAddress(conHallRequest.getAddress());
         if(concertHallInDb != null)
-            return  ResponseEntity.ok("Концертна зала на този адрес вече е запаметена");
+            return  ResponseEntity.ok("This address is already in use");
 
         concertHallInDb = concertHallRepo.findConcertHallByName(conHallRequest.getConHallName()) ;
         if(concertHallInDb != null)
-            return  ResponseEntity.ok("Концертна зала с това име вече съществува вече е запаметена");
+            return  ResponseEntity.ok("Concert Hall with name :"+conHallRequest.getConHallName()+" is already exist.");
+
 
         City cityInDB = cityRepo.findByName(conHallRequest.getCity())
                 .orElse(new City(conHallRequest.getCity())) ;
@@ -73,25 +83,28 @@ public class ConcertHallController {
 
             ConcertHall concertHall  = new ConcertHall(
               conHallRequest.getConHallName(),
-               conHallRequest.getAdress(),
+               conHallRequest.getAddress(),
                String.valueOf(conHallRequest.getCapacity()),
                cityInDB
          );
          concertHallRepo.save( concertHall);
-         return  ResponseEntity.ok("Концертната зала : " + concertHall.getConHallName() + " бе успешно запазена" );
+         return  ResponseEntity.ok("Concert Hall: " + concertHall.getConHallName() + " saved successfully" );
 
         }
         catch (DataIntegrityViolationException e) {
-            return ResponseEntity.ok("Не сте въвели всички елементи, опитайте отново!");
+            return ResponseEntity.ok("It is mandatory to fill all concert hall fields correctly. Check your personal data.");
         }
-        catch (ParameterRecognitionException e) {
+        catch (ParameterMisuseException u) {                // проверка за : капацитета
+            return ResponseEntity.ok(u.getMessage());
+        }
+        catch (ParameterRecognitionException e) {           // проверка за :  името
             return  ResponseEntity.ok( e.getMessage()) ;
         }
-        catch (NullPointerException e ){
+        catch (NullPointerException e ){                    // проверка за :  името
             return  ResponseEntity.ok(e.getMessage());
         }
         catch (Exception e ){
-            return ResponseEntity.ok(e.getMessage());
+            return ResponseEntity.ok("Something went wrong, try again <3");
 
         }
     }
@@ -113,12 +126,11 @@ public class ConcertHallController {
                 concertHallRepo.delete(hall.get());
                 return ResponseEntity.ok("Concert hall with name : " + name + " in City " + city +
                         " was deleted");
-                //return("Hall with name : " + name + "in " + city + " was deleted!");
             }
             catch ( DataIntegrityViolationException e ){
-                return  ResponseEntity.ok ("Не можете да изтриете залата, защото тя е част от концерт");
+                return  ResponseEntity.ok ("The Concert Hall can not be deleted as it is part of a concert!");
             } catch (Exception e){
-        return  ResponseEntity.ok("Нещо се обърка, опитай пак <3");}
+        return  ResponseEntity.ok("Something went wrong, try again <3");}
 
 
 
@@ -126,35 +138,15 @@ public class ConcertHallController {
             return ResponseEntity.ok("City not found");
     }
 
-    @PostMapping("/city/save")
-    public  ResponseEntity<?> saveCity(String name ,
-                                       @RequestParam(required = false) Long id ){
-        City city  ;
-        try{
-            city = cityRepo.findById(id)
-                    .orElse(new City(name));
-
-            if(city != null)
-            {
-                city.setName(name);
-            }
-
-        }catch (Exception e){
-            return  new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
-        }
-
-        cityRepo.save(city);
-        return ResponseEntity.ok("City was save" );
-    }
 
     @GetMapping("/city/fetch")
-    public List<City> getAllCitites() {
+    public List<City> getAllCites() {
         return cityRepo.findAll();
     }
 
     @GetMapping("/pages")
     public ResponseEntity<?> filterHalls( @RequestParam(defaultValue = "") String conHallName,
-                                          @RequestParam(defaultValue = "") String adress,
+                                          @RequestParam(defaultValue = "") String address,
                                           @RequestParam(defaultValue = "1") int currentPage,
                                           @RequestParam(defaultValue = "5") int perPage){
 
@@ -162,7 +154,7 @@ public class ConcertHallController {
        Page<ConcertHall> results = concertHallRepo.filterHallPages(
                pageable,
                conHallName.toLowerCase(),
-               adress.toLowerCase());
+               address.toLowerCase());
 
 
 

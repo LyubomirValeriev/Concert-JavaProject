@@ -3,6 +3,7 @@ package com.concert.concertApp.controllers;
 import com.concert.concertApp.entities.Discount;
 import com.concert.concertApp.repositories.DiscountRepository;
 import org.hibernate.engine.query.ParameterRecognitionException;
+import org.hibernate.procedure.ParameterMisuseException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,18 +31,18 @@ public class DiscountController {
                                           String percent) {
         if (name == null ||
                 name.isEmpty())
-            return ResponseEntity.ok("Мoля въведете име!");
+            return ResponseEntity.ok("Enter a title to create a discount!");
         if (percent == null ||
                 percent.isEmpty())
-            return ResponseEntity.ok("Мoля въведете процент!");
+            return ResponseEntity.ok("Enter a percent to create a discount!!");
 
         Discount discountInDb = discountRepo.filterDiscoun(name, percent);
         if (discountInDb != null)
-            return ResponseEntity.ok("Вече съществува отстъпка с това име и проценти!");
+            return ResponseEntity.ok("Discount with this name and percent already exist");
 
         discountInDb = discountRepo.findDiscountByName(name.toLowerCase(Locale.ROOT));
         if (discountInDb != null)
-            return ResponseEntity.ok("Вече съществува отстъпка с това име!");
+            return ResponseEntity.ok("Discount with this name already exist!");
 
         try {
             discountInDb = new Discount(
@@ -49,17 +50,19 @@ public class DiscountController {
                     percent
             );
             discountRepo.save(discountInDb);
-            return  ResponseEntity.ok("Отстъпката беше запазена успешно <3") ;
+            return  ResponseEntity.ok("Discount saved successfully  <3") ;
         } catch (DataIntegrityViolationException e) {
-            return ResponseEntity.ok("Не сте въвели всички елементи, опитайте отново!");
-        }  catch (ParameterRecognitionException e) {
+            return ResponseEntity.ok("It is mandatory to fill all discount fields correctly. Check your personal data!");
+        }catch (ParameterMisuseException w) {        // проверка за невалидни данни
+                return  ResponseEntity.ok( w.getMessage());}
+        catch (ParameterRecognitionException e) {        // проверка за невалидни данни
             return  ResponseEntity.ok( e.getMessage());
         }
-        catch (NullPointerException e ){
+        catch (NullPointerException e ){                        // проверка за невалидни данни
             return  ResponseEntity.ok(e.getMessage());
         }
         catch (Exception e ){
-            return ResponseEntity.ok(e.getMessage());
+            return ResponseEntity.ok("Something went wrong, try again <3");
         }
     }
 
@@ -67,15 +70,15 @@ public class DiscountController {
     public ResponseEntity<?> deleteDiscount(String name) {
         Discount discountInDb = discountRepo.findDiscountByName(name);
         if (discountInDb == null)
-            return ResponseEntity.ok("Отстъпка с това име не може да бъде открита :_(");
+            return ResponseEntity.ok("Discount not found :_(");
 
         try {
             discountRepo.delete(discountInDb);
-            return ResponseEntity.ok("Отстъпка с име :" + discountInDb.getDiscountName() + " беше изтрита");
+            return ResponseEntity.ok("Discount with name :" + discountInDb.getDiscountName() + " was deleted");
         } catch (DataIntegrityViolationException e) {
-            return ResponseEntity.ok("Не можете да изтриете отстъпката, защото тя е част от някоя резервация");
+            return ResponseEntity.ok("The Discount can not be deleted as it is part of a some reservation");
         } catch (Exception e) {
-            return ResponseEntity.ok("Нещо се обърка, опитай пак <3");
+            return ResponseEntity.ok("Something went wrong, try again <3");
         }
 }
 }
