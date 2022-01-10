@@ -111,7 +111,7 @@ public class ConcertHallController {
             String name ,
             String city ){
 
-        Optional<City> city1 = cityRepo.findByName(city);
+        Optional<City> city1 = cityRepo.findByName(city.toLowerCase(Locale.ROOT));
         if(!city1.isEmpty()) {
 
             Optional<ConcertHall> hall = concertHallRepo.findConcertHallByConHallName(name);
