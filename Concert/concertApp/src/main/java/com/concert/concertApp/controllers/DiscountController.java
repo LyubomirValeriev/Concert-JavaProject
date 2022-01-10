@@ -68,7 +68,7 @@ public class DiscountController {
 
     @DeleteMapping("/delete")
     public ResponseEntity<?> deleteDiscount(String name) {
-        Discount discountInDb = discountRepo.findDiscountByName(name);
+        Discount discountInDb = discountRepo.findDiscountByName(name.toLowerCase(Locale.ROOT));
         if (discountInDb == null)
             return ResponseEntity.ok("Discount not found :_(");
 
