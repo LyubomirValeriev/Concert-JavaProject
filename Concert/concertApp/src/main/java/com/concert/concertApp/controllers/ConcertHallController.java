@@ -17,10 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -72,15 +69,15 @@ public class ConcertHallController {
             return  ResponseEntity.ok("Concert Hall with name :"+conHallRequest.getConHallName()+" is already exist.");
 
 
-        City cityInDB = cityRepo.findByName(conHallRequest.getCity())
-                .orElse(new City(conHallRequest.getCity())) ;
-        if(cityInDB.getId() == null)
-        {
-            cityRepo.save(cityInDB);
-        }
+
 
         try {
-
+            City cityInDB = cityRepo.findByName(conHallRequest.getCity().toLowerCase(Locale.ROOT))
+                    .orElse(new City(conHallRequest.getCity())) ;
+            if(cityInDB.getId() == null)
+            {
+                cityRepo.save(cityInDB);
+            }
             ConcertHall concertHall  = new ConcertHall(
               conHallRequest.getConHallName(),
                conHallRequest.getAddress(),

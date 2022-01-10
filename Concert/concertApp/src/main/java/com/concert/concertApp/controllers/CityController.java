@@ -72,7 +72,7 @@ public class CityController {
         if (name.isEmpty() || name == null)
             return ResponseEntity.ok("Enter a name to delete a city!");
         try{
-            City city = cityRepo.findName(name);
+            City city = cityRepo.findName(name.toLowerCase(Locale.ROOT));
             if(city == null)
                 return  ResponseEntity.ok("City not found");
             cityRepo.delete(city);
