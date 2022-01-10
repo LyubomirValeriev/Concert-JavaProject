@@ -46,15 +46,15 @@ public class CityController {
 
         City cityInDB = null;
         try {
-            cityInDB = cityRepo.findName(name.toLowerCase(Locale.ROOT));
+            cityInDB = cityRepo.findName(name.toLowerCase(Locale.ROOT).trim());
             if (cityInDB != null)
                 throw new IllegalArgumentException("City already exist !");
 
             cityInDB = cityRepo.findId(id)
-                    .orElse(new City(name));
+                    .orElse(new City(name.trim()));
 
             if (cityInDB.getId() != null) {
-                cityInDB.setName(name);
+                cityInDB.setName(name.trim());
             }
 
             cityRepo.save(cityInDB);
