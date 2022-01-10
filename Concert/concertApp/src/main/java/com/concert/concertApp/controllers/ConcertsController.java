@@ -76,6 +76,10 @@ public class ConcertsController {
         if ((concertRequest.getPerformers() == null) || (concertRequest.getPerformers()).isEmpty()){
             return ResponseEntity.ok("Enter performers to create a concert!");
         }
+        if(concertRequest.getConHallId() == null || concertRequest.getConHallId() == 0) {
+        return  ResponseEntity.ok("Enter Concert Hall id  to create a concert!");
+        }
+
 
         Set<Performer> performerSet = new HashSet<>();
         for (String performerName : concertRequest.getPerformers()) {
@@ -85,22 +89,31 @@ public class ConcertsController {
             performerSet.add(performer);
         }
 
+
         Concert concertInDB = concertRepo.fetchConcertLikeTitle((concertRequest.getTitle().toLowerCase()).trim());
         if (concertInDB != null) {
             return ResponseEntity.ok("Concert already exist");
         }
+
+
         try {
+            ConcertHall hall =  concertHallRepo.findById(concertRequest.getConHallId())
+                .orElseThrow(() -> new IllegalArgumentException("Concert Hall with id:" +concertRequest.getConHallId() +" doesn't exist!"));
             Concert concert = new Concert((concertRequest.getTitle()),
                     concertRequest.getDescription(),
                     concertRequest.getPrice(),
                     concertRequest.getDate(),
-                    performerSet);
+                    performerSet,
+                    hall);
             concertRepo.save(concert);
 
             return ResponseEntity.ok("Concert " + concert.getTitle()  + " saved successfully");
         }catch (NullPointerException e) {
         return ResponseEntity.ok(e.getMessage());
-        } catch (ParameterRecognitionException pre) {
+
+        }catch (IllegalArgumentException k){
+            return  ResponseEntity.ok(k.getMessage());
+        }catch (ParameterRecognitionException pre) {
             return ResponseEntity.ok(pre.getMessage());  // проверка за невалидни данни - price
         }
 

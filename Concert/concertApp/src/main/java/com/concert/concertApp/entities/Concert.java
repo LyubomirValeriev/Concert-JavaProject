@@ -52,7 +52,8 @@ public class Concert {
     public Concert() {
     }
 
-    public Concert(String title, String description, String price, Timestamp date, Set<Performer> performers) {
+    public Concert(String title, String description,
+                   String price, Timestamp date, Set<Performer> performers) {
             this.setTitle(title);
             this.description = description;
             this.setPrice(price);
@@ -67,6 +68,17 @@ public class Concert {
         this.description = description;
         this.setPrice(price);
         this.setDate(date);
+    }
+
+    public Concert(String title, String description,
+                   String price, Timestamp date, Set<Performer> performers, ConcertHall concertHall) {
+        this.setTitle(title);
+        this.description = description;
+        this.setPrice(price);
+        this.setDate(date);
+        this.performers = performers;
+        this.hall = concertHall ;
+
     }
 
     public Long getId() {

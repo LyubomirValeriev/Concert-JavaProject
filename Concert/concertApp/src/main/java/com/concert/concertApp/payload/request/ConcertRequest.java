@@ -9,6 +9,7 @@ public class ConcertRequest {
     private  String description;
     private String price;
     private Timestamp date;
+    private Long  conHallId ;
     List<String> performers;
 
     public String getTitle() {
@@ -49,5 +50,13 @@ public class ConcertRequest {
 
     public void setPerformers(List<String> performers) {
         this.performers = performers;
+    }
+
+    public Long getConHallId() {
+        return conHallId;
+    }
+
+    public void setConHallId(Long conHallId) {
+        this.conHallId = conHallId;
     }
 }
