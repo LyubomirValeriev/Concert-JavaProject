@@ -30,11 +30,11 @@ public class User {
 
     @Column(nullable = false)
     private String email;
-
+    @JsonIgnore
     @Column(nullable = false)
     private String username;
 
-
+    @JsonIgnore
     @Column(nullable = false)
     private String password;
 

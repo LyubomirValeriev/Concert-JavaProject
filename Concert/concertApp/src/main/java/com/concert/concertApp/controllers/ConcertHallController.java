@@ -69,8 +69,6 @@ public class ConcertHallController {
             return  ResponseEntity.ok("Concert Hall with name :"+conHallRequest.getConHallName()+" is already exist.");
 
 
-
-
         try {
             City cityInDB = cityRepo.findByName(conHallRequest.getCity().toLowerCase(Locale.ROOT))
                     .orElse(new City(conHallRequest.getCity())) ;
@@ -108,31 +106,23 @@ public class ConcertHallController {
 
     @DeleteMapping("/deleteHall")
     public ResponseEntity<?> deleteHall (
-            String name ,
-            String city ){
+            String name ) {
 
-        Optional<City> city1 = cityRepo.findByName(city.toLowerCase(Locale.ROOT));
-        if(!city1.isEmpty()) {
+        Optional<ConcertHall> hall = concertHallRepo.findConcertHallByConHallName(name);
+        if (hall.isEmpty()) {
+            return ResponseEntity.ok("Hall not found");
 
-            Optional<ConcertHall> hall = concertHallRepo.findConcertHallByConHallName(name);
-            if (hall.isEmpty()) {
-                return ResponseEntity.ok("Hall not found");
-
-            }
-            try {
-                concertHallRepo.delete(hall.get());
-                return ResponseEntity.ok("Concert hall with name : " + name + " in City " + city +
-                        " was deleted");
-            }
-            catch ( DataIntegrityViolationException e ){
-                return  ResponseEntity.ok ("The Concert Hall can not be deleted as it is part of a concert!");
-            } catch (Exception e){
-        return  ResponseEntity.ok("Something went wrong, try again <3");}
-
-
-
-    }else
-            return ResponseEntity.ok("City not found");
+        }
+        try {
+            concertHallRepo.delete(hall.get());
+            return ResponseEntity.ok("Concert hall with name : " + name + " in City "
+                    + hall.get().getCity().getName() +
+                    " was deleted");
+        } catch (DataIntegrityViolationException e) {
+            return ResponseEntity.ok("The Concert Hall can not be deleted as it is part of a concert!");
+        } catch (Exception e) {
+            return ResponseEntity.ok("Something went wrong, try again <3");
+        }
     }
 
 

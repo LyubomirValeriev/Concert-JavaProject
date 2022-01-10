@@ -68,9 +68,11 @@ public class ReservationsController {
          if(discount != null) {
              discountInDb = discountRepo.findById(discount)
                      .orElseThrow(() -> new IllegalArgumentException("Check  discount id again <3"));
-         }else if (discount == null)
-             throw  new IllegalArgumentException("Enter discount id to create reservation");
-
+         } else if (discount == null) {
+             discount = Long.valueOf(0);
+             discountInDb = discountRepo.findDiscountById(discount);
+            // throw new IllegalArgumentException("Enter discount id to create reservation");
+         }
          if(concertId != null ) {
              concert = concertsRepo.findById(concertId)
                      .orElseThrow(() -> new IllegalArgumentException("Check concert id again <3"));
